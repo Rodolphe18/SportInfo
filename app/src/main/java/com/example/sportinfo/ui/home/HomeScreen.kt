@@ -1,6 +1,7 @@
 package com.example.sportinfo.ui.home
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,37 +44,73 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.sportinfo.domain.model.Area
+import com.example.sportinfo.ui.composable.HomePageChip
+import kotlinx.coroutines.launch
+
+
+@Composable
+internal fun HomeRoute(
+) {
+    HomeScreen()
+}
 
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-internal fun HomeRoute(
-    viewModel: HomeViewModel = hiltViewModel()
-) {
-    val homeUiState by viewModel.homeState.collectAsStateWithLifecycle()
-    HomeScreen(homeState = homeUiState)
-}
-
-
-@Composable
-internal fun HomeScreen(homeState: HomeUiState) {
-    if (homeState.isLoading) {
+internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+    val scope = rememberCoroutineScope()
+    val state by viewModel.homeState.collectAsStateWithLifecycle()
+    if (state.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(color = Color.Blue)
         }
     } else {
-        LazyColumn(state = rememberLazyListState()) {
-            item {
-                for (type in enumValues<ContinentArea>()) {
-                    homeState.areas
-                        ?.asSequence()
-                        ?.filter { area -> !area.flag.isNullOrEmpty() }
-                        .let { areaList ->
-                        val section = areaList?.filter {
-                            it.parentArea?.lowercase().orEmpty() == type.title.lowercase()
-                        }?.toList()
-                        AreasSection(type.title, section)
+        Column {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
+                item {
+                    for (chip in enumValues<HomeChipType>()) {
+                        HomePageChip(
+                            chipName = chip.title,
+                            isSelected = chip.isSelected.value,
+                            onSelectedCategoryChanged = {
+                                scope.launch {
+                                    viewModel.getFilterSelected(chip)
+                                }
+                            },
+                        )
                     }
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            if (!viewModel.isFilterSelected) {
+                LazyColumn(state = rememberLazyListState()) {
+                    item {
+                        for (type in enumValues<HomeChipType>()) {
+                            state.areas
+                                ?.asSequence()
+                                ?.sortedByDescending { area -> !area.flag.isNullOrEmpty() }
+                                .let { areaList ->
+                                    val section = areaList?.filter {
+                                        it.parentAreaId == type.areaId
+                                    }?.toList()
+                                    AreasSection(type.title, section)
+                                }
+                        }
+                    }
+                }
+            } else {
+                LazyColumn(state = rememberLazyListState()) {
+                    state.areas
+                    ?.sortedByDescending { area -> !area.flag.isNullOrEmpty() }
+                    ?.let { areas ->
+                        items(areas) { area ->
+                            AreaItem(area)
+                        }
+                    }
+
                 }
             }
         }
@@ -91,8 +129,8 @@ fun AreasSection(
             SectionTitle(title)
             LazyRow(
                 state = rememberLazyListState(),
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(
@@ -111,32 +149,36 @@ fun AreaItem(area: Area) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .height(90.dp),
+            .height(75.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier
-                .width(100.dp)
-                .height(60.dp)
-        ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(area.flag)
-                    .build(),
-                contentScale = ContentScale.FillBounds,
-                contentDescription = null
-            )
+
+            Box(
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(50.dp)
+                    .background(Color.LightGray)
+            ) {
+                if (!area.flag.isNullOrEmpty()) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(area.flag)
+                        .build(),
+                    contentScale = ContentScale.FillBounds,
+                    contentDescription = null
+                )
+            }
         }
-        Column(Modifier.padding(horizontal = 12.dp)) {
-            Text(
-                text = area.parentArea?.uppercase().orEmpty(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.DarkGray,
-            )
+        Column(Modifier.padding(horizontal = 8.dp)) {
             Text(
                 text = area.name.orEmpty(),
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 15.sp,
+                color = Color.Black,
+            )
+            Text(
+                text = area.parentAreaId.toString(),
+                fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp,
                 color = Color.Black,
             )

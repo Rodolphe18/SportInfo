@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -25,11 +27,14 @@ fun CompetitionItem(competition: Competition, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(70.dp)
+            .height(100.dp)
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(modifier = Modifier.width(70.dp).height(70.dp).padding(horizontal = 10.dp).weight(0.5f)) {
+        Box(modifier = Modifier
+            .size(70.dp)
+            .padding(horizontal = 4.dp)
+            .weight(0.5f)) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(competition.emblem)
@@ -42,21 +47,15 @@ fun CompetitionItem(competition: Competition, modifier: Modifier = Modifier) {
             text = competition.name,
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp,
+            overflow = TextOverflow.Ellipsis,
             color = Color.Black,
         )
-        Column() {
-            Text(
-                text = competition.currentSeason.startDate,
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-                color = Color.Red,
-            )
-            Text(
-                text = competition.area.name ?: "",
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-                color = Color.Blue
-            )
-        }
+        Text(
+            modifier = Modifier.padding(end = 6.dp),
+            text = competition.area.name.orEmpty(),
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            color = Color.DarkGray
+        )
     }
 }
