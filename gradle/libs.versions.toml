@@ -1,0 +1,30 @@
+[versions]
+android = "7.4.0"
+kotlin = "1.7.21"
+detekt = "1.22.0"
+hilt = "2.44.2"
+sport = "1.0.0"
+sport-code = "1"
+sport-beta = "1"
+protobuf = "3.21.9"
+protobufPlugin = "0.8.19"
+androidxDataStore = "1.0.0"
+
+[libraries]
+android-plugin = { module = "com.android.tools.build:gradle", version.ref = "android" }
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-test = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
+
+[plugins]
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "300340811976",
+    "project_id": "sport-a87ed",
+    "storage_bucket": "sport-a87ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300340811976:android:327f9d6921d6068e476dfd",
+        "android_client_info": {
+          "package_name": "com.francotte.android.sportinfo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJHpis_poOtjJ6z98EkAQMi7IqFU5LXAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

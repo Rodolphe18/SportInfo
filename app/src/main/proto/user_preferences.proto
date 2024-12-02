@@ -1,0 +1,18 @@
+
+syntax = "proto3";
+
+import "dark_theme_config.proto";
+import "theme_brand.proto";
+
+option java_package = "com.example.sportinfo";
+option java_multiple_files = true;
+
+
+message UserPreferences {
+    reserved 2;
+
+    ThemeBrandProto theme_brand = 3;
+    DarkThemeConfigProto dark_theme_config = 4;
+
+
+}
