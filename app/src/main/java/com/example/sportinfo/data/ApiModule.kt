@@ -2,7 +2,8 @@ package com.example.sportinfo.data
 
 import android.app.Application
 import androidx.room.Room
-import com.example.sportinfo.data.database.SportDatabase
+import com.example.sportinfo.data.local.SportDatabase
+import com.example.sportinfo.data.remote.api.MyInterceptor
 import com.example.sportinfo.data.remote.api.AreaApi
 import com.example.sportinfo.data.remote.api.CompetitionApi
 import com.example.sportinfo.data.remote.api.MatchApi

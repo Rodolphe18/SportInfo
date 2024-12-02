@@ -1,9 +1,8 @@
 package com.example.sportinfo.domain.repository
 
-import com.example.sportinfo.data.database.SportDatabase
-import com.example.sportinfo.data.database.model.asExternalModel
+import com.example.sportinfo.data.local.SportDatabase
+import com.example.sportinfo.data.local.model.asExternalModel
 import com.example.sportinfo.data.remote.api.CompetitionApi
-import com.example.sportinfo.data.remote.dto.areas.asEntity
 import com.example.sportinfo.data.remote.dto.competitions.asEntity
 import com.example.sportinfo.domain.model.Competition
 import kotlinx.coroutines.flow.Flow

@@ -1,7 +1,7 @@
 package com.example.sportinfo.data.remote.dto.competitions
 
 import androidx.room.ColumnInfo
-import com.example.sportinfo.data.database.model.CompetitionEntity
+import com.example.sportinfo.data.local.model.CompetitionEntity
 import com.example.sportinfo.data.remote.dto.areas.NetworkArea
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

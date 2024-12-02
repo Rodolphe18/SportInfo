@@ -1,6 +1,6 @@
 package com.example.sportinfo.domain.repository
 
-import com.example.sportinfo.data.database.SportDatabase
+import com.example.sportinfo.data.local.SportDatabase
 import com.example.sportinfo.data.remote.api.MatchApi
 import com.example.sportinfo.data.remote.dto.matches.Match
 import kotlinx.coroutines.flow.Flow

@@ -39,8 +39,6 @@ import com.example.sportinfo.ui.navigation.SportsIcons
 import com.example.sportinfo.ui.navigation.SportsNavHost
 import com.example.sportinfo.ui.navigation.SportsTopAppBar
 import com.example.sportinfo.ui.navigation.TopLevelDestination
-import com.example.sportinfo.ui.settings.SettingsDialog
-import com.example.sportinfo.ui.state.NetworkMonitor
 import com.example.sportinfo.ui.state.SportsAppState
 import com.example.sportinfo.ui.state.rememberSportsAppState
 import com.francotte.android.R
@@ -53,9 +51,7 @@ import com.francotte.android.R
 @Composable
 fun SportsApp(
     windowSizeClass: WindowSizeClass,
-    networkMonitor: NetworkMonitor,
     appState: SportsAppState = rememberSportsAppState(
-        networkMonitor = networkMonitor,
         windowSizeClass = windowSizeClass
     ),
 ) {
@@ -109,23 +105,6 @@ fun SportsApp(
                 }
             }
         ) { padding ->
-
-            val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-
-            // If user is not connected to the internet show a snack bar to inform them.
-            val notConnected = stringResource(R.string.not_connected)
-            LaunchedEffect(isOffline) {
-                if (isOffline) snackbarHostState.showSnackbar(
-                    message = notConnected,
-                    duration = SnackbarDuration.Indefinite
-                )
-            }
-
-            if (appState.shouldShowSettingsDialog) {
-                SettingsDialog(
-                    onDismiss = { appState.setShowSettingsDialog(false) }
-                )
-            }
 
             Row(
                 Modifier

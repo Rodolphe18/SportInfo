@@ -32,12 +32,11 @@ import kotlinx.coroutines.flow.stateIn
 @Composable
 fun rememberSportsAppState(
     windowSizeClass: WindowSizeClass,
-    networkMonitor: NetworkMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
 ): SportsAppState {
-    return remember(navController, coroutineScope, windowSizeClass, networkMonitor) {
-        SportsAppState(navController, coroutineScope, windowSizeClass, networkMonitor)
+    return remember(navController, coroutineScope, windowSizeClass) {
+        SportsAppState(navController, coroutineScope, windowSizeClass)
     }
 }
 
@@ -46,7 +45,6 @@ class SportsAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
-    networkMonitor: NetworkMonitor,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -70,13 +68,6 @@ class SportsAppState(
     val shouldShowNavRail: Boolean
         get() = !shouldShowBottomBar
 
-    val isOffline = networkMonitor.isOnline
-        .map(Boolean::not)
-        .stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false
-        )
 
     /**
      * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the

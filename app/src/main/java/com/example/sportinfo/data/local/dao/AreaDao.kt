@@ -1,11 +1,10 @@
-package com.example.sportinfo.data.database.dao
+package com.example.sportinfo.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.sportinfo.data.database.model.AreaEntity
-import kotlinx.coroutines.flow.Flow
+import com.example.sportinfo.data.local.model.AreaEntity
 
 @Dao
 interface AreaDao {

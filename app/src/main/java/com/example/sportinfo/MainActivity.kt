@@ -13,16 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sportinfo.ui.SportsApp
-import com.example.sportinfo.ui.state.NetworkMonitor
 import com.example.sportinfo.ui.theme.SportInfoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SportsApp(windowSizeClass = calculateWindowSizeClass(this), networkMonitor = networkMonitor)
+                    SportsApp(windowSizeClass = calculateWindowSizeClass(this))
                 }
             }
         }

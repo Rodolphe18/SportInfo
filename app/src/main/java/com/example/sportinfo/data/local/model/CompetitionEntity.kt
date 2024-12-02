@@ -1,4 +1,4 @@
-package com.example.sportinfo.data.database.model
+package com.example.sportinfo.data.local.model
 
 import androidx.room.Embedded
 import androidx.room.Entity

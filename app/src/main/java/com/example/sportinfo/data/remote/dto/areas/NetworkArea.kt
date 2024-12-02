@@ -1,9 +1,8 @@
 package com.example.sportinfo.data.remote.dto.areas
 
-import com.example.sportinfo.data.database.model.AreaEntity
+import com.example.sportinfo.data.local.model.AreaEntity
 import com.example.sportinfo.domain.model.Area
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

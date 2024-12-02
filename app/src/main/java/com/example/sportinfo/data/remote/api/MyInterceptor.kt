@@ -1,4 +1,4 @@
-package com.example.sportinfo.data
+package com.example.sportinfo.data.remote.api
 
 import okhttp3.Interceptor
 import okhttp3.Response

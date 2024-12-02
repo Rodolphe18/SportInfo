@@ -1,4 +1,4 @@
-package com.example.sportinfo.data.database.dao
+package com.example.sportinfo.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
