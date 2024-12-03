@@ -10,7 +10,6 @@ plugins {
     id("com.google.firebase.appdistribution")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
-    id("io.github.simonschiller.permissioncheck") version "1.7.0"
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.detekt)
     id("com.google.protobuf") version "0.9.1"
@@ -27,7 +26,7 @@ inline get() = libs.versions.sport.code.map(String::toInt).get()
 
 @Suppress("StringLiteralDuplication", "UnderscoresInNumericLiterals")
 android {
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.francotte.android.sportinfo"
@@ -35,7 +34,7 @@ android {
         minSdk = 21
         versionName = appVersionName
         versionCode = appVersionCode
-        targetSdk = 33
+        targetSdk = 34
         testInstrumentationRunner = "com.francotte.android.test"
         multiDexEnabled = true
 
@@ -102,19 +101,15 @@ dependencies {
     kapt("androidx.hilt:hilt-compiler:$androidHiltVersion")
     kapt(libs.hilt.compiler)
     implementation("androidx.browser:browser:1.5.0-beta01")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.security:security-crypto:1.1.0-alpha04")
     implementation("androidx.startup:startup-runtime:1.1.1")
     val workVersion = "2.8.0-beta02"
     implementation("androidx.work:work-runtime:$workVersion")
     implementation("androidx.work:work-runtime-ktx:$workVersion")
-    implementation("androidx.fragment:fragment-ktx:1.5.5")
     val activityVersion = "1.6.1"
     implementation("androidx.activity:activity-ktx:$activityVersion")
     implementation("androidx.activity:activity-compose:$activityVersion")
     val navVersion = "2.5.3"
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation(libs.protobuf.kotlin.lite)
@@ -126,13 +121,11 @@ dependencies {
     val lifecycleVersion = "2.5.1"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+   implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-process:$lifecycleVersion")
-    implementation("androidx.core:core-google-shortcuts:1.1.0")
     implementation("androidx.preference:preference-ktx:1.2.0")
-    implementation(platform("androidx.compose:compose-bom:2023.01.00"))
+    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.runtime:runtime")
     implementation("androidx.compose.ui:ui")
@@ -146,24 +139,11 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha03")
     implementation("androidx.compose.material3:material3-window-size-class")
-    implementation("androidx.customview:customview:1.2.0-alpha02")
-    implementation("androidx.customview:customview-poolingcontainer:1.0.0")
-    implementation("androidx.recyclerview:recyclerview:1.3.0-rc01")
     implementation("androidx.webkit:webkit:1.6.0-rc01")
     implementation("com.google.android.material:material:1.8.0-rc01")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    val accompanistVersion = "0.28.0"
-    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-pager:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-swiperefresh:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-placeholder-material:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-webview:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-permissions:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
 
     implementation(platform("com.google.firebase:firebase-bom:31.1.1"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
@@ -203,20 +183,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-okio")
     implementation("com.google.guava:guava:31.1-android")
-    implementation("com.dropbox.mobile.store:store4:4.0.5")
-    implementation("jp.wasabeef:recyclerview-animators:4.0.2")
-    implementation("com.facebook.shimmer:shimmer:0.5.0")
-    implementation("com.vmadalin:easypermissions-ktx:1.0.0")
-    implementation("dev.chrisbanes.insetter:insetter:0.6.1")
     implementation("org.jsoup:jsoup:1.15.3")
-    implementation("com.facebook.android:facebook-android-sdk:15.2.0")
     implementation("org.eclipse.collections:eclipse-collections:11.1.0")
     implementation("com.batch.android:batch-sdk:1.19.3")
-    implementation("com.dailymotion.dailymotion-sdk-android:sdk:0.2.12")
-    implementation("com.squareup:seismic:1.0.3")
     implementation("com.adjust.sdk:adjust-android:4.33.2")
-
-    add("detektPlugins", libs.detekt.formatting)
 
     val androidTestVersion = "1.5.0"
     testImplementation("junit:junit:4.13.2")
@@ -241,14 +211,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.ext:truth:1.5.0")
     androidTestImplementation("com.google.truth:truth:1.1.3")
-    val espressoVersion = "3.5.0"
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-accessibility:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-web:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso.idling:idling-concurrent:$espressoVersion")
-    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
     androidTestImplementation(libs.hilt.android.test)
     androidTestImplementation("androidx.window:window")
