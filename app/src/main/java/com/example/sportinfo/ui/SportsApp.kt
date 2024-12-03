@@ -1,10 +1,9 @@
 package com.example.sportinfo.ui
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.consumedWindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -13,14 +12,11 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -30,41 +26,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.sportinfo.ui.navigation.SportsBackground
 import com.example.sportinfo.ui.navigation.SportsBottomBar
-import com.example.sportinfo.ui.navigation.SportsGradientBackground
 import com.example.sportinfo.ui.navigation.SportsIcons
 import com.example.sportinfo.ui.navigation.SportsNavHost
 import com.example.sportinfo.ui.navigation.SportsTopAppBar
-import com.example.sportinfo.ui.navigation.TopLevelDestination
 import com.example.sportinfo.ui.state.SportsAppState
 import com.example.sportinfo.ui.state.rememberSportsAppState
 import com.francotte.android.R
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalLayoutApi::class,
-    ExperimentalComposeUiApi::class, ExperimentalLifecycleComposeApi::class
+    ExperimentalComposeUiApi::class
 )
 @Composable
 fun SportsApp(
     windowSizeClass: WindowSizeClass,
-    appState: SportsAppState = rememberSportsAppState(
-        windowSizeClass = windowSizeClass
-    ),
-) {
-    val background: @Composable (@Composable () -> Unit) -> Unit =
-        when (appState.currentTopLevelDestination) {
-            TopLevelDestination.HOME -> {
-                    content ->
-                SportsGradientBackground(content = content)
-            }
-            else -> { content -> SportsBackground(content = content) }
-        }
-
-    background {
+    appState: SportsAppState = rememberSportsAppState(windowSizeClass = windowSizeClass)) {
 
         val snackbarHostState = remember { SnackbarHostState() }
 
@@ -121,9 +98,8 @@ fun SportsApp(
 
                     modifier = Modifier
                         .padding(padding)
-                        .consumedWindowInsets(padding)
+                        .consumeWindowInsets(padding)
                 )
             }
         }
     }
-}
