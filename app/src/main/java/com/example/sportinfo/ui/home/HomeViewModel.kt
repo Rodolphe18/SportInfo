@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportinfo.domain.model.Area
 import com.example.sportinfo.domain.repository.AreaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,34 +27,69 @@ class HomeViewModel @Inject constructor(
 
     var isFilterSelected by mutableStateOf(false)
 
-    init {
+    fun reload() {
         viewModelScope.launch {
-            areaRepository
-                .getAreasList()
-                .collect { areaList ->
-                    areaList.let {
-                        _homeState.update { it.copy(areas = emptyList()) }
-                        _homeState.update { it.copy(areas = areaList) }
-                    }
-                }
-            _homeState.update { it.copy(isLoading = false) }
+            try {
+                _homeState.update { it.copy(isInError = false, isReloading = true) }
+                isFilterSelected = false
+                getAreas()
+            } catch (e: Exception) {
+                _homeState.update { it.copy(isInError = true, isReloading = false) }
+            } finally {
+                _homeState.update { it.copy(isReloading = false) }
+            }
         }
+    }
+
+    init {
+        load()
+    }
+
+    private fun load() {
+        viewModelScope.launch {
+            try {
+                getAreas()
+            } catch (e: Exception) {
+                _homeState.update { it.copy(isInError = true) }
+            } finally {
+                _homeState.update { it.copy(isLoading = false) }
+            }
+
+
+        }
+    }
+
+    private suspend fun getAreas() {
+        areaRepository
+            .getAreasList()
+            .collect { areaList ->
+                areaList.let {
+                    _homeState.update { it.copy(areas = emptyList()) }
+                    _homeState.update { it.copy(areas = areaList) }
+                }
+            }
     }
 
 
     fun getFilterSelected(homeChipType: HomeChipType) {
         viewModelScope.launch {
-            areaRepository
-                .getAreasList()
-                .map { list -> list.filter { it.parentAreaId == homeChipType.areaId } }
-                .collect { areaList ->
-                    areaList.let {
-                        _homeState.update { it.copy(areas = emptyList()) }
-                        _homeState.update { it.copy(areas = areaList) }
+            try {
+                _homeState.update { it.copy(isLoading = true) }
+                areaRepository
+                    .getAreasList()
+                    .map { list -> list.filter { it.parentAreaId == homeChipType.areaId } }
+                    .collect { areaList ->
+                        areaList.let {
+                            _homeState.update { it.copy(areas = emptyList()) }
+                            _homeState.update { it.copy(areas = areaList) }
+                        }
                     }
-                }
-            _homeState.update { it.copy(isLoading = false) }
-            isFilterSelected = true
+            } catch (e: Exception) {
+                _homeState.update { it.copy(isInError = true) }
+            } finally {
+                _homeState.update { it.copy(isLoading = false) }
+                isFilterSelected = true
+            }
         }
     }
 
@@ -62,5 +98,7 @@ class HomeViewModel @Inject constructor(
 
 data class HomeUiState(
     val areas: List<Area>? = emptyList(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val isReloading: Boolean = false,
+    val isInError: Boolean = false
 )

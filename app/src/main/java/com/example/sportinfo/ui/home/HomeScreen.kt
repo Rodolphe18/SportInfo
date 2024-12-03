@@ -1,13 +1,10 @@
 package com.example.sportinfo.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,14 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -55,64 +50,83 @@ internal fun HomeRoute(
 }
 
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val scope = rememberCoroutineScope()
     val state by viewModel.homeState.collectAsStateWithLifecycle()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = state.isReloading,
+        onRefresh = viewModel::reload
+    )
     if (state.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(color = Color.Blue)
         }
     } else {
-        Column {
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp)
-            ) {
-                item {
-                    for (chip in enumValues<HomeChipType>()) {
-                        HomePageChip(
-                            chipName = chip.title,
-                            isSelected = chip.isSelected.value,
-                            onSelectedCategoryChanged = {
-                                scope.launch {
-                                    viewModel.getFilterSelected(chip)
-                                }
-                            },
-                        )
-                    }
-                }
-            }
-            Spacer(Modifier.height(8.dp))
-            if (!viewModel.isFilterSelected) {
-                LazyColumn(state = rememberLazyListState()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pullRefresh(state = pullRefreshState)
+        ) {
+            Column {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
                     item {
-                        for (type in enumValues<HomeChipType>()) {
-                            state.areas
-                                ?.asSequence()
-                                ?.sortedByDescending { area -> !area.flag.isNullOrEmpty() }
-                                .let { areaList ->
-                                    val section = areaList?.filter {
-                                        it.parentAreaId == type.areaId
-                                    }?.toList()
-                                    AreasSection(type.title, section)
-                                }
+                        val chips = enumValues<HomeChipType>()
+                        for (chip in chips) {
+                            HomePageChip(
+                                chipName = chip.title,
+                                isSelected = chip.isSelected.value,
+                                onSelectedCategoryChanged = {
+                                    scope.launch {
+                                        chips.onEach { it.isSelected.value = false }
+                                        viewModel.getFilterSelected(chip)
+                                        chip.isSelected.value = true
+                                    }
+                                },
+                            )
                         }
                     }
                 }
-            } else {
-                LazyColumn(state = rememberLazyListState()) {
-                    state.areas
-                    ?.sortedByDescending { area -> !area.flag.isNullOrEmpty() }
-                    ?.let { areas ->
-                        items(areas) { area ->
-                            AreaItem(area)
+                Spacer(Modifier.height(8.dp))
+                if (!viewModel.isFilterSelected) {
+                    LazyColumn(state = rememberLazyListState()) {
+                        item {
+                            for (type in enumValues<HomeChipType>()) {
+                                state.areas
+                                    ?.asSequence()
+                                    ?.sortedByDescending { area -> !area.flag.isNullOrEmpty() }
+                                    .let { areaList ->
+                                        val section = areaList?.filter {
+                                            it.parentAreaId == type.areaId
+                                        }?.toList()
+                                        AreasSection(type.title, section)
+                                    }
+                            }
                         }
                     }
+                } else {
+                    LazyColumn(state = rememberLazyListState()) {
+                        state.areas
+                            ?.sortedByDescending { area -> !area.flag.isNullOrEmpty() }
+                            ?.let { areas ->
+                                items(areas) { area ->
+                                    AreaItem(area)
+                                }
+                            }
 
+                    }
                 }
             }
+            PullRefreshIndicator(
+                refreshing = state.isReloading,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter),
+                contentColor = MaterialTheme.colorScheme.secondary
+            )
         }
     }
 }
@@ -153,13 +167,13 @@ fun AreaItem(area: Area) {
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-            Box(
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(50.dp)
-                    .background(Color.LightGray)
-            ) {
-                if (!area.flag.isNullOrEmpty()) {
+        Box(
+            modifier = Modifier
+                .width(80.dp)
+                .height(50.dp)
+                .background(Color.LightGray)
+        ) {
+            if (!area.flag.isNullOrEmpty()) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(area.flag)
@@ -196,12 +210,12 @@ fun SectionTitle(title: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(modifier = Modifier.weight(1f)) {
-            androidx.compose.material3.Text(
+            Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(vertical = 10.dp),
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }
