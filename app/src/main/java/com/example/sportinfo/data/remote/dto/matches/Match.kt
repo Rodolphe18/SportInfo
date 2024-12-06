@@ -1,43 +1,40 @@
 package com.example.sportinfo.data.remote.dto.matches
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import com.example.sportinfo.data.remote.dto.areas.NetworkArea
 import com.example.sportinfo.data.remote.dto.competitions.NetworkLightCompetition
 import com.example.sportinfo.data.remote.dto.competitions.NetworkSeason
 import kotlinx.serialization.Serializable
 
-@Entity(tableName = "matches_entity")
+
 @Serializable
 data class Match(
-    @Embedded val area: NetworkArea,
+    val area: NetworkArea,
     val attendance: Int,
-    @Embedded val awayTeam: AwayTeam,
-    @Embedded val competition: NetworkLightCompetition,
-    @Ignore val goals: List<Goal>? = emptyList(),
-    @Embedded val homeTeam: HomeTeam,
-    @PrimaryKey val id: Int,
+    val awayTeam: AwayTeam,
+    val competition: NetworkLightCompetition,
+    val goals: List<Goal>?,
+    val homeTeam: HomeTeam,
+    val id: Int,
     val injuryTime: Int,
-    val lastUpdated: String,
+    val lastUpdated: String? = "",
     val matchday: Int,
-    val minute: String?,
-    @Embedded val odds: Odds,
-    @Ignore val penalties: List<Penalty> = emptyList(),
-    @Ignore val referees: List<Referee> = emptyList(),
-    @Embedded val score: Score,
-    @Embedded val season: NetworkSeason,
-    val stage: String,
-    val status: String,
-    val utcDate: String,
-    val venue: String?
+    val minute: String? = "",
+    val odds: Odds,
+    val penalties: List<Penalty> = emptyList(),
+    val referees: List<Referee> = emptyList(),
+    val score: Score?,
+    val season: NetworkSeason,
+    val stage: String? = "",
+    val status: String? = "",
+    val utcDate: String? = "",
+    val venue: String? = ""
 ) {
     constructor(
         area: NetworkArea,
         attendance: Int,
         awayTeam: AwayTeam,
         competition: NetworkLightCompetition,
+        goals: List<Goal>,
         homeTeam: HomeTeam,
         id: Int,
         injuryTime: Int,
@@ -52,7 +49,7 @@ data class Match(
         utcDate: String,
         venue: String?
     ) : this(
-        area, attendance, awayTeam, competition, emptyList(),
+        area, attendance, awayTeam, competition, goals,
         homeTeam,
         id,
         injuryTime,
@@ -71,3 +68,4 @@ data class Match(
     )
 
 }
+
