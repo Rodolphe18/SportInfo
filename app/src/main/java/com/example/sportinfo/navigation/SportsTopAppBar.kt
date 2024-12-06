@@ -1,4 +1,4 @@
-package com.example.sportinfo.ui.navigation
+package com.example.sportinfo.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material3.CenterAlignedTopAppBar

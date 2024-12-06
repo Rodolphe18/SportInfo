@@ -1,4 +1,4 @@
-package com.example.sportinfo.ui.state
+package com.example.sportinfo.navigation
 
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -10,24 +10,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.util.trace
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import androidx.tracing.trace
-import com.example.sportinfo.ui.competitions.competitionNavigationRoute
-import com.example.sportinfo.ui.competitions.navigateToCompetition
-import com.example.sportinfo.ui.navigation.TopLevelDestination
-import com.example.sportinfo.ui.home.homeNavigationRoute
-import com.example.sportinfo.ui.home.navigateToHome
-import com.example.sportinfo.ui.matches.matchNavigationRoute
-import com.example.sportinfo.ui.matches.navigateToMatch
+import com.example.sportinfo.ui.competitions.navigateToCompetitions
+import com.example.sportinfo.ui.favorites.navigateToFavorites
+import com.example.sportinfo.ui.teams.navigateToTeams
+import com.example.sportinfo.ui.today.navigateToToday
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun rememberSportsAppState(
@@ -51,11 +46,10 @@ class SportsAppState(
             .currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            homeNavigationRoute -> TopLevelDestination.HOME
-            competitionNavigationRoute -> TopLevelDestination.COMPETITION
-            matchNavigationRoute -> TopLevelDestination.MATCH
-            else -> null
+        @Composable get() {
+            return TopLevelDestination.entries.firstOrNull { topLevelDestination ->
+                currentDestination?.hasRoute(route = topLevelDestination.route) == true
+            }
         }
 
     var shouldShowSettingsDialog by mutableStateOf(false)
@@ -99,9 +93,10 @@ class SportsAppState(
             }
 
             when (topLevelDestination) {
-                TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
-                TopLevelDestination.COMPETITION -> navController.navigateToCompetition(topLevelNavOptions)
-                TopLevelDestination.MATCH -> navController.navigateToMatch(topLevelNavOptions)
+                TopLevelDestination.COMPETITIONS -> navController.navigateToCompetitions(topLevelNavOptions)
+                TopLevelDestination.TODAY -> navController.navigateToToday(topLevelNavOptions)
+                TopLevelDestination.TEAMS -> navController.navigateToTeams(topLevelNavOptions)
+               TopLevelDestination.FAVORIS -> navController.navigateToFavorites(topLevelNavOptions)
             }
         }
     }
