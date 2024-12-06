@@ -1,6 +1,11 @@
 package com.example.sportinfo.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Parcelize
+@Serializable
 data class Area(
     val id: Int?,
     val name : String?,
@@ -8,7 +13,7 @@ data class Area(
     val flag: String?,
     val parentAreaId: Int?,
     val parentArea: String?
-)
+):Parcelable
 
 
 
