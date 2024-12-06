@@ -7,4 +7,32 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="jv_blue">#0061EE</color>
+    <color name="jv_blue_darker">#00324D</color>
+    <color name="jv_orange">#FF3C00</color>
+    <color name="jv_tech_lighter">#499A7E</color>
+    <color name="jv_tech_darker">#367B69</color>
+    <color name="jv_tech_light_2">#C2D7C6</color>
+
+    <color name="light_blue">#21A2FF</color>
+    <color name="light_blue_2">#BDDBFE</color>
+    <color name="blue_bg">#E3E8F2</color>
+    <color name="blue_action">#004266</color>
+
+    <color name="grey_600">#272A30</color>
+    <color name="grey_00600">#00272A30</color>
+    <color name="grey_500">#393D41</color>
+    <color name="grey_400">#5A5D64</color>
+    <color name="grey_300">#AFB3B8</color>
+    <color name="grey_200">#E3E6EB</color>
+    <color name="grey_100">#F8F9FB</color>
+    <color name="grey_00100">#00F8F9FB</color>
+    <color name="grey_999">#999999</color>
+    <color name="light">#FFFFFF</color>
+    <color name="alpha_light">#99FFFFFF</color>
+    <color name="dark">#18191B</color>
+
+    <!-- Web -->
+    <color name="webview_background_dark">#22252a</color>
+    <color name="webview_background_light">#f2f2f2</color>
 </resources>
