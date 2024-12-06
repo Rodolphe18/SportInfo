@@ -1,6 +1,10 @@
-package com.example.sportinfo.ui.navigation
+package com.example.sportinfo.navigation
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.HeartBroken
+import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -15,7 +19,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import com.francotte.android.R
+import com.example.sportinfo.ui.competitions.BaseRoute
+import com.example.sportinfo.ui.competitions.CompetitionsNavigationRoute
+import com.example.sportinfo.ui.favorites.FavoritesNavigationRoute
+import com.example.sportinfo.ui.teams.TeamsNavigationRoute
+import com.example.sportinfo.ui.today.TodayNavigationRoute
+import com.francotte.android.sportinfo.R
+import kotlin.reflect.KClass
 
 @Composable
 fun RowScope.SportsNavigationBarItem(
@@ -37,9 +47,9 @@ fun RowScope.SportsNavigationBarItem(
         label = label,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.Red,
+            selectedIconColor = Color.Blue,
             unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            selectedTextColor = Color.Red,
+            selectedTextColor = Color.Blue,
             unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
             indicatorColor = MaterialTheme.colorScheme.onSecondary)
     )
@@ -100,22 +110,32 @@ fun SportsBottomBar(
 enum class TopLevelDestination(
     val selectedIcon: Icon,
     val unselectedIcon: Icon,
-    val titleTextId: Int
+    val titleTextId: Int,
+    val route: KClass<*>
 ) {
-    HOME(
-        selectedIcon = Icon.ImageVectorIcon(SportsIcons.Home),
-        unselectedIcon = Icon.ImageVectorIcon(SportsIcons.Home),
-        titleTextId = R.string.home
-    ),
-    COMPETITION(
+    COMPETITIONS(
         selectedIcon = Icon.ImageVectorIcon(SportsIcons.Competition),
         unselectedIcon = Icon.ImageVectorIcon(SportsIcons.Competition),
-        titleTextId = R.string.competition
+        titleTextId = R.string.competition,
+        route = CompetitionsNavigationRoute::class
     ),
-    MATCH(
-        selectedIcon = Icon.ImageVectorIcon(SportsIcons.Match),
-        unselectedIcon = Icon.ImageVectorIcon(SportsIcons.Match),
-        titleTextId = R.string.match
+    TEAMS(
+        selectedIcon = Icon.ImageVectorIcon(Icons.Filled.Flag),
+        unselectedIcon = Icon.ImageVectorIcon(Icons.Filled.Flag),
+        titleTextId = R.string.team,
+        route = TeamsNavigationRoute::class
+    ),
+    TODAY(
+        selectedIcon = Icon.ImageVectorIcon(Icons.Filled.Today),
+        unselectedIcon = Icon.ImageVectorIcon(Icons.Filled.Today),
+        titleTextId = R.string.today,
+        route = TodayNavigationRoute::class
+    ),
+    FAVORIS(
+        selectedIcon = Icon.ImageVectorIcon(Icons.Filled.HeartBroken),
+        unselectedIcon = Icon.ImageVectorIcon(Icons.Filled.HeartBroken),
+        titleTextId = R.string.favoris,
+        route = FavoritesNavigationRoute::class
     )
 }
 

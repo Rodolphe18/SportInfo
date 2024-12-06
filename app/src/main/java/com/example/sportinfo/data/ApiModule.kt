@@ -1,12 +1,8 @@
 package com.example.sportinfo.data
 
-import android.app.Application
-import androidx.room.Room
-import com.example.sportinfo.data.local.SportDatabase
+import com.example.sportinfo.data.remote.api.HttpLoggingInterceptor
 import com.example.sportinfo.data.remote.api.MyInterceptor
-import com.example.sportinfo.data.remote.api.AreaApi
-import com.example.sportinfo.data.remote.api.CompetitionApi
-import com.example.sportinfo.data.remote.api.MatchApi
+import com.example.sportinfo.data.remote.api.SportInfoApi
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -21,39 +17,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModule {
 
-    private val client = OkHttpClient.Builder().apply {addInterceptor(MyInterceptor()) }.build()
+    private val client = OkHttpClient.Builder().apply {
+        addInterceptor(MyInterceptor())
+        addInterceptor(HttpLoggingInterceptor())
+    }.build()
+
 
     @Singleton
     @Provides
-    private inline fun <reified A> providesApi() : A {
+    fun providesApi() : SportInfoApi {
         return Retrofit.Builder()
             .baseUrl("https://api.football-data.org/v4/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
-            .create()
+            .create(SportInfoApi::class.java)
     }
 
-    @Singleton
-    @Provides
-    fun providesCompetitionApi() : CompetitionApi = providesApi()
-
-    @Singleton
-    @Provides
-    fun providesMatchApi() : MatchApi = providesApi()
-
-    @Singleton
-    @Provides
-    fun providesAreaApi() : AreaApi = providesApi()
-
-    @Singleton
-    @Provides
-    fun providesSportDatabase(app: Application) : SportDatabase {
-        return Room.databaseBuilder(app, SportDatabase::class.java, "sport_databse.db")
-            .fallbackToDestructiveMigration()
-            .build()
-    }
 
 }
-
-inline fun <reified T> Retrofit.create() : T = create(T::class.java)

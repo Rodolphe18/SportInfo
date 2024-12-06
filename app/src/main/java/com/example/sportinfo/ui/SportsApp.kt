@@ -21,18 +21,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.zIndex
-import com.example.sportinfo.ui.navigation.SportsBottomBar
-import com.example.sportinfo.ui.navigation.SportsIcons
-import com.example.sportinfo.ui.navigation.SportsNavHost
-import com.example.sportinfo.ui.navigation.SportsTopAppBar
-import com.example.sportinfo.ui.state.SportsAppState
-import com.example.sportinfo.ui.state.rememberSportsAppState
-import com.francotte.android.R
+import com.example.sportinfo.navigation.SportsBottomBar
+import com.example.sportinfo.navigation.SportsIcons
+import com.example.sportinfo.navigation.SportsNavHost
+import com.example.sportinfo.navigation.SportsTopAppBar
+import com.example.sportinfo.navigation.SportsAppState
+import com.example.sportinfo.navigation.rememberSportsAppState
+import com.francotte.android.sportinfo.R
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -41,7 +40,8 @@ import com.francotte.android.R
 @Composable
 fun SportsApp(
     windowSizeClass: WindowSizeClass,
-    appState: SportsAppState = rememberSportsAppState(windowSizeClass = windowSizeClass)) {
+    appState: SportsAppState = rememberSportsAppState(windowSizeClass = windowSizeClass)
+) {
 
         val snackbarHostState = remember { SnackbarHostState() }
 
@@ -76,13 +76,11 @@ fun SportsApp(
                     SportsBottomBar(
                         destinations = appState.topLevelDestinations,
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
-                        currentDestination = appState.currentDestination,
-                        modifier = Modifier.testTag("SportsBottomBar")
+                        currentDestination = appState.currentDestination
                     )
                 }
             }
         ) { padding ->
-
             Row(
                 Modifier
                     .fillMaxSize()
@@ -94,8 +92,6 @@ fun SportsApp(
             ) {
                 SportsNavHost(
                     navController = appState.navController,
-                    onBackClick = appState::onBackClick,
-
                     modifier = Modifier
                         .padding(padding)
                         .consumeWindowInsets(padding)

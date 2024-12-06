@@ -1,36 +1,61 @@
 package com.example.sportinfo.domain.repository
 
-import com.example.sportinfo.data.local.SportDatabase
-import com.example.sportinfo.data.remote.api.MatchApi
+
+import com.example.sportinfo.data.remote.api.SportInfoApi
 import com.example.sportinfo.data.remote.dto.matches.Match
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class MatchRepository @Inject constructor(val matchApi : MatchApi, val db: SportDatabase) {
+class MatchRepository @Inject constructor(val sportInfoApi: SportInfoApi) {
 
-    val dao = db.matchDao
 
-    suspend fun getRemoteMatchList(): Flow<List<Match>> {
+    fun getPremierLeagueMatchList(): Flow<List<Match>> {
         return flow {
-            val competitions = matchApi.getPremierLeagueMatches().matches
-            emit(competitions)
-        }
+            val premierLeagueMatches =
+                try {
+                    sportInfoApi.getPremierLeagueMatches().matches
+                } catch (e: Exception) {
+                    null
+                }
+            premierLeagueMatches?.let {
+                emit(it)
+            }
+        }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getLocalMatchesList(): Flow<List<Match>> {
-        val remoteMatchesList = try {
-            matchApi.getPremierLeagueMatches().matches
-        } catch (e: Exception) {
-            null
-        }
-        remoteMatchesList?.let {
-            dao.clearMatchesList()
-            dao.insertMatchesList(remoteMatchesList)
-        }
-        return dao.searchMatchesList()
+
+    fun getTodayMatchList(): Flow<List<Match>> {
+        return flow {
+            val matches =
+                try {
+                    sportInfoApi.getTodayMatches().matches
+                } catch (e: Exception) {
+                    null
+                }
+            matches?.let {
+                emit(it)
+            }
+        }.flowOn(Dispatchers.IO)
     }
+
+    fun getCompetitionMatchList(competitionId: String): Flow<List<Match>> {
+        return flow {
+            val matches =
+                try {
+                    sportInfoApi.getCompetitionMatches(competitionId).matches
+                } catch (e: Exception) {
+                    null
+                }
+            matches?.let {
+                emit(it)
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
 }
