@@ -1,37 +1,31 @@
 package com.example.sportinfo.domain.repository
 
-import com.example.sportinfo.data.local.SportDatabase
-import com.example.sportinfo.data.local.model.asExternalModel
-import com.example.sportinfo.data.remote.api.CompetitionApi
-import com.example.sportinfo.data.remote.dto.competitions.asEntity
+import com.example.sportinfo.data.remote.api.SportInfoApi
+import com.example.sportinfo.data.remote.dto.competitions.asExternalModel
 import com.example.sportinfo.domain.model.Competition
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CompetitionRepository @Inject constructor(
-    val competitionApi: CompetitionApi,
-    val db: SportDatabase
+    private val sportInfoApi: SportInfoApi,
+
 ) {
 
-    private val dao = db.competitionDao
-
-    suspend fun getCompetitionsList(): Flow<List<Competition>> {
-        val remoteCompetitionsList = try {
-            competitionApi.getCompetitions().competitions
-        } catch (e: Exception) {
-            null
-        }
-        remoteCompetitionsList?.let { remoteList ->
-            dao.clearCompetitionsList()
-            dao.insertCompetitionsList(
-                remoteList.map { it.asEntity() }
-            )
-        }
+    fun getCompetitionsList(): Flow<List<Competition>> {
         return flow {
-            emit(dao.searchCompetitionsList().map { it.asExternalModel() }) }
+            val remoteCompetitionsList = try {
+                sportInfoApi.getCompetitions().competitions
+            } catch (e: Exception) {
+                null
+            }
+            remoteCompetitionsList?.let { remoteList ->
+                emit(remoteList.map { it.asExternalModel() }) }
+        }.flowOn(Dispatchers.IO)
     }
 }
 
