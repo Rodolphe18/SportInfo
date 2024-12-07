@@ -19,7 +19,10 @@ object ApiModule {
 
     private val client = OkHttpClient.Builder().apply {
         addInterceptor(MyInterceptor())
-        addInterceptor(HttpLoggingInterceptor())
+        addInterceptor(
+            HttpLoggingInterceptor()
+                .setLevel(HttpLoggingInterceptor.Level.BODY)
+        )
     }.build()
 
 
