@@ -35,14 +35,8 @@ import com.francotte.android.sportinfo.R
 
 
 @Composable
-fun SmallTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
-    Box(Modifier
-        .fillMaxWidth()
-        .height(100.dp)
-        .padding(horizontal = 8.dp, vertical = 4.dp)
-        .clip(shape = RoundedCornerShape(6.dp))
-        .background(Color(0xFFBDDBFE))
-        ) {
+fun SmallTeamsInfoItem(modifier: Modifier = Modifier, team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
+    Box(modifier) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 AsyncImage(
@@ -83,12 +77,8 @@ fun SmallTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
 }
 
 @Composable
-fun BigTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
-    Box(Modifier
-        .width(320.dp)
-        .aspectRatio(2f)
-        .clip(shape = RoundedCornerShape(16.dp))
-        .background(Color(0xFFBDDBFE))) {
+fun BigTeamsInfoItem(modifier: Modifier = Modifier, team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
+    Box(modifier) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 AsyncImage(
@@ -125,9 +115,9 @@ fun BigTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
 
 @Composable
 fun BigSportsInfoItem(competition: Competition, onToggleFavorite: (Competition, Boolean) -> Unit, onCompetitionClick:(String) -> Unit) {
-    Box(Modifier.height(150.dp).clip(shape = RoundedCornerShape(16.dp)).background(Color(0xFFBDDBFE)).clickable { onCompetitionClick(competition.code.orEmpty()) }) {
-        Column(modifier = Modifier.padding(8.dp)) {
-            Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+    Box(Modifier.height(150.dp).clip(shape = RoundedCornerShape(16.dp)).background(Color.White).clickable { onCompetitionClick(competition.code.orEmpty()) }) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(modifier = Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                 AsyncImage(
                     modifier = Modifier.size(40.dp),
                     model = ImageRequest.Builder(LocalContext.current)

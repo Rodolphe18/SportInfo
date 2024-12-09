@@ -1,5 +1,6 @@
 package com.example.sportinfo.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Flag
@@ -16,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import com.example.sportinfo.ui.competitions.BaseRoute
 import com.example.sportinfo.ui.competitions.CompetitionsNavigationRoute
 import com.example.sportinfo.ui.favorites.FavoritesNavigationRoute
 import com.example.sportinfo.ui.teams.TeamsNavigationRoute
@@ -47,11 +48,11 @@ fun RowScope.SportsNavigationBarItem(
         label = label,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.Blue,
+            selectedIconColor = Color.White,
             unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            selectedTextColor = Color.Blue,
+            selectedTextColor = Color(0xFF6200EE),
             unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            indicatorColor = MaterialTheme.colorScheme.onSecondary)
+            indicatorColor = Color(0xFFBB86FC))
     )
 }
 
@@ -62,7 +63,8 @@ fun SportsNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        containerColor = Color(0xFFE3E8F2),
+        contentColor = Color(0xFFE3E8F2),
         tonalElevation = 0.dp,
         content = content
     )
@@ -101,7 +103,7 @@ fun SportsBottomBar(
                         )
                     }
                 },
-                label = { Text(stringResource(destination.titleTextId)) }
+                label = { Text(stringResource(destination.titleTextId), fontWeight = FontWeight.SemiBold) }
             )
         }
     }

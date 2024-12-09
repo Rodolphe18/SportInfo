@@ -29,7 +29,7 @@ fun FavoriteButton(
             .padding(5.dp)
             .size(40.dp)
             .clip(CircleShape)
-            .drawBehind { drawCircle(color = Color.White) }
+            .drawBehind { drawCircle(color = Color(0xFFBDDBFE)) }
             .toggleable(
                 value = isFavorite,
                 onValueChange = {
@@ -44,7 +44,7 @@ fun FavoriteButton(
             ),
             contentDescription = null,
             modifier = Modifier.align(Alignment.Center),
-            tint = if (isFavorite) Color.Yellow else Color.LightGray
+            tint = if (isFavorite) Color.Yellow else Color.White
         )
     }
 }

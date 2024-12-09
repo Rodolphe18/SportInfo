@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
  */
 
 val LightDefaultColorScheme = lightColorScheme(
-    primary = Color(0xFF0061EE),
+    primary = Color.DarkGray,
     onPrimary = Color(0xFFFFFFFF),
     secondary = Color(0xFFFF3C00),
     onSecondary = Color(0xFFFFFFFF),

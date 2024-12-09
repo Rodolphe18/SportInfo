@@ -1,5 +1,7 @@
 package com.example.sportinfo.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -20,6 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -43,8 +47,13 @@ fun SportsApp(
     appState: SportsAppState = rememberSportsAppState(windowSizeClass = windowSizeClass)
 ) {
 
-        val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
 
+    Box(Modifier.fillMaxSize()) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(Brush.verticalGradient(listOf(Color(0xFFBDDBFE),Color(0xFFE3E8F2)))))
         Scaffold(
             modifier = Modifier.semantics {
                 testTagsAsResourceId = true
@@ -74,6 +83,7 @@ fun SportsApp(
             bottomBar = {
                 if (appState.shouldShowBottomBar) {
                     SportsBottomBar(
+                        modifier = Modifier.drawBehind {  Color(0xFFBDDBFE) },
                         destinations = appState.topLevelDestinations,
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
                         currentDestination = appState.currentDestination
@@ -99,3 +109,4 @@ fun SportsApp(
             }
         }
     }
+}

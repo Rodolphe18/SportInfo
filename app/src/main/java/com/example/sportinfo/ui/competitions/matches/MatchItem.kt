@@ -29,7 +29,7 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(110.dp)
             .padding(8.dp)
     ) {
         Row {
@@ -115,7 +115,7 @@ fun ScheduledMatchItem(match: Match, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(110.dp)
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -164,6 +164,6 @@ fun ScheduledMatchItem(match: Match, modifier: Modifier = Modifier) {
                 )
             }
         }
-        Text(modifier = Modifier.weight(0.2f),text = DateTimeFormatter.getFormattedTime(match.utcDate.orEmpty()))
+        Text(modifier = Modifier.weight(0.2f),text = DateTimeFormatter.getFormattedTime(match.utcDate.orEmpty()), fontWeight = FontWeight.SemiBold)
     }
 }
