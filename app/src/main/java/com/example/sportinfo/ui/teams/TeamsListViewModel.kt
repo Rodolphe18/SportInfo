@@ -31,31 +31,9 @@ class TeamsListViewModel @Inject constructor(private val teamRepository: TeamRep
     ViewModel() {
 
 
-//    private val ligue1Teams =
-//        teamRepository.getLigue1Teams().stateIn(viewModelScope, WhileUiSubscribed, null)
-//    private val bundesligaTeams =
-//        teamRepository.getBundesligaTeams().stateIn(viewModelScope, WhileUiSubscribed, emptyList())
-//    private val seriaATeams =
-//        teamRepository.getSerieATeams().stateIn(viewModelScope, WhileUiSubscribed, emptyList())
-//    private val ligaTeams =
-//        teamRepository.getLigaTeams().stateIn(viewModelScope, WhileUiSubscribed, emptyList())
-//    private val premierLeagueTeams = teamRepository.getPremierLeagueTeams()
-//        .stateIn(viewModelScope, WhileUiSubscribed, emptyList())
-//    private val primeiraDivisionTeams = teamRepository.getPrimeiraDivisionTeams()
-//        .stateIn(viewModelScope, WhileUiSubscribed, emptyList())
-//
-//    val uiState: StateFlow<TeamsUiState> = combine(
-//        ligue1Teams,
-//        bundesligaTeams,
-//        seriaATeams,
-//        ligaTeams,
-//        premierLeagueTeams,
-//        primeiraDivisionTeams
-//    ) { input ->
-//        TeamsUiState.Success(input.flatMap { it.orEmpty() })
-//    }.stateIn(viewModelScope, WhileUiSubscribed, TeamsUiState.Loading)
+    private val _state = MutableStateFlow(TeamsUiState(emptyList()))
 
-    val _state = MutableStateFlow(TeamsUiState(emptyList()))
+
     val state = _state.stateIn(viewModelScope, WhileUiSubscribed, TeamsUiState(emptyList()))
 
     private var page by mutableIntStateOf(1)

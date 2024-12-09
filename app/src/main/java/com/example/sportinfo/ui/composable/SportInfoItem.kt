@@ -40,7 +40,7 @@ fun SmallTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
         .fillMaxWidth()
         .height(100.dp)
         .padding(horizontal = 8.dp, vertical = 4.dp)
-        .clip(shape = RoundedCornerShape(4.dp))
+        .clip(shape = RoundedCornerShape(6.dp))
         .background(Color(0xFFBDDBFE))
         ) {
         Column(modifier = Modifier.padding(8.dp)) {
@@ -85,7 +85,8 @@ fun SmallTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
 @Composable
 fun BigTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
     Box(Modifier
-        .fillMaxWidth(0.9f)
+        .width(320.dp)
+        .aspectRatio(2f)
         .clip(shape = RoundedCornerShape(16.dp))
         .background(Color(0xFFBDDBFE))) {
         Column(modifier = Modifier.padding(8.dp)) {

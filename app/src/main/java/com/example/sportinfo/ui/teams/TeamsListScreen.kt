@@ -1,6 +1,7 @@
 package com.example.sportinfo.ui.teams
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,20 +26,24 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.sportinfo.domain.model.Team
+import com.example.sportinfo.ui.composable.BigTeamsInfoItem
+import com.example.sportinfo.ui.composable.LoadingScreen
 import com.example.sportinfo.ui.composable.SectionTitle
 import com.example.sportinfo.ui.composable.SmallTeamsInfoItem
+import com.example.sportinfo.ui.composable.TwoPansPager
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TeamRoute(viewModel: TeamsListViewModel = hiltViewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    TeamsListScreen(
-        viewModel
-    )
+fun TeamRoute(allTeamsViewModel: TeamsListViewModel = hiltViewModel(), sortedTeamsUiState: TeamsByChampionshipViewModel = hiltViewModel()) {
+    val sortedTeamsState by sortedTeamsUiState.uiState.collectAsStateWithLifecycle()
+    TwoPansPager(page1 = { AllTeamsListScreen(allTeamsViewModel) }, page2 = { TeamsByChampionshipListScreen(sortedTeamsState) })
 }
 
+
+
 @Composable
-fun TeamsListScreen(
+fun AllTeamsListScreen(
     viewModel: TeamsListViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -71,6 +76,25 @@ fun TeamsListScreen(
     }
 }
 
+@Composable
+fun TeamsByChampionshipListScreen(state:SortedTeamsUiState) {
+    when(state) {
+        SortedTeamsUiState.Loading -> LoadingScreen()
+        is SortedTeamsUiState.Success -> {
+            val teams = state.teams
+            val championships = enumValues<TeamType>()
+            LazyColumn() {
+                item {
+                    for(championship in championships) {
+                        TeamsSection(championship.title, teams.filter { it.area?.name?.lowercase() == championship.country.lowercase() })
+                    }
+                }
+            }
+        }
+    }
+
+}
+
 
 @Composable
 fun TeamsSection(
@@ -90,7 +114,7 @@ fun TeamsSection(
                     items = requireNotNull(teams),
                     key = { it.id }
                 ) { team ->
-                    SmallTeamsInfoItem(team, { _, _ -> })
+                    BigTeamsInfoItem(team, { _, _ -> })
                 }
             }
         }

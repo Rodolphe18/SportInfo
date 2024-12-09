@@ -39,12 +39,12 @@ fun FavoriteButton(
 
     ) {
         Icon(
-            painter = if (isFavorite) painterResource(R.drawable.ic_star_full) else painterResource(
-                R.drawable.ic_star_empty_small
+            painter = if (isFavorite) painterResource(R.drawable.ic_favorite_full) else painterResource(
+                R.drawable.ic_favorite_empty
             ),
             contentDescription = null,
             modifier = Modifier.align(Alignment.Center),
-            tint = if (isFavorite) Color.Yellow else Color.Gray
+            tint = if (isFavorite) Color.Yellow else Color.LightGray
         )
     }
 }
