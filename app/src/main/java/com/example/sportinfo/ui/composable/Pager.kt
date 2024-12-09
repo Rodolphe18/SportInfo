@@ -1,6 +1,7 @@
 package com.example.sportinfo.ui.composable
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,10 +46,11 @@ fun TwoPansPager(
     Column(modifier = modifier.fillMaxWidth()) {
         Spacer(modifier = modifier.height(12.dp))
         TabRow(
-            modifier = modifier.fillMaxWidth(), selectedTabIndex = selectedTabIndex
+            modifier = modifier.fillMaxWidth().background(Color(0xFFBDDBFE)), selectedTabIndex = selectedTabIndex
         ) {
             tabItem.forEachIndexed { index, _ ->
                 Tab(
+                    modifier = Modifier.background(Color(0xFFBDDBFE)),
                     selected = index == selectedTabIndex,
                     onClick = {
                         selectedTabIndex = index
@@ -55,8 +58,8 @@ fun TwoPansPager(
                     text = {
                         Text(
                             text = if (index == 0) "All Teams" else "By Championship",
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold,
+                            color = Color.DarkGray,
+                            fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
                     })
