@@ -1,6 +1,7 @@
 package com.example.sportinfo.ui.composable
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
@@ -19,15 +20,17 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun HomePageChip(
+    modifier: Modifier = Modifier,
     chipName: String,
     isSelected: Boolean,
-    onSelectedCategoryChanged: (Boolean) -> Unit
+    onSelectedCategoryChanged: (Boolean) -> Unit,
 ) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .height(32.dp)
-            .padding(end = 8.dp)
+            .padding(horizontal = 8.dp)
             .clip(RoundedCornerShape(16.dp))
+            .clickable {  }
             .toggleable(
                 value = isSelected,
                 onValueChange = {
@@ -42,7 +45,7 @@ fun HomePageChip(
         Text(
             text = chipName,
             color = if (isSelected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSecondaryContainer,
-            modifier = Modifier.padding(top = 5.dp, start = 10.dp, end = 10.dp),
+            modifier = modifier.padding(horizontal = 8.dp),
             fontWeight = FontWeight.Medium,
             fontSize = 14.sp
         )

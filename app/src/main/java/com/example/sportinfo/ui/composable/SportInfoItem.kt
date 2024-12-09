@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,12 +35,14 @@ import com.francotte.android.sportinfo.R
 
 
 @Composable
-fun SmallSportsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
+fun SmallTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
     Box(Modifier
-        .width(320.dp)
-        .aspectRatio(16f / 9f)
-        .clip(shape = RoundedCornerShape(16.dp))
-        .background(Color(0xFFBDDBFE))) {
+        .fillMaxWidth()
+        .height(100.dp)
+        .padding(horizontal = 8.dp, vertical = 4.dp)
+        .clip(shape = RoundedCornerShape(4.dp))
+        .background(Color(0xFFBDDBFE))
+        ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 AsyncImage(
@@ -71,6 +74,46 @@ fun SmallSportsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
                 text = team.runningCompetitions.map { it?.name }.joinToString(" | "),
                 fontSize = 12.sp,
                 overflow = TextOverflow.Ellipsis
+            )
+        }
+        FavoriteButton(modifier = Modifier
+            .align(Alignment.TopEnd).padding(4.dp),isFavorite = team.isFavorite, onToggleFavorite = { checked -> onToggleFavorite(team, checked) })
+
+    }
+}
+
+@Composable
+fun BigTeamsInfoItem(team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
+    Box(Modifier
+        .fillMaxWidth(0.9f)
+        .clip(shape = RoundedCornerShape(16.dp))
+        .background(Color(0xFFBDDBFE))) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                AsyncImage(
+                    modifier = Modifier.size(25.dp),
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(team.crest)
+                        .build(),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null
+                )
+                Text(
+                    modifier = Modifier.padding(start = 6.dp),
+                    text = team.name.orEmpty(),
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 20.sp
+                )
+            }
+            Text(
+                text = team.venue.orEmpty(),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
+            Text(
+                text = team.area?.name.orEmpty(),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
             )
         }
         FavoriteButton(modifier = Modifier

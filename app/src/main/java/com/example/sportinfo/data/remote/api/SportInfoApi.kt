@@ -7,6 +7,7 @@ import com.example.sportinfo.data.remote.dto.teams.NetworkTeams
 import com.example.sportinfo.data.remote.dto.teams.NetworkTeamsByCompetition
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface SportInfoApi {
 
@@ -14,16 +15,13 @@ interface SportInfoApi {
     suspend fun getCompetitions() : NetworkCompetitions
 
     @GET("competitions/{competitionId}/matches")
-    suspend fun getCompetitionMatches(@Path("competitionId") competitionId : String) : Matches
-
-    @GET("competitions/{id}/matches")
-    suspend fun getPremierLeagueMatches(@Path("id") id : String = "CL") : Matches
+    suspend fun getCompetitionMatches(@Path("competitionId") competitionId : String, @Query("matchday") status: Int = 2) : Matches
 
     @GET("matches")
     suspend fun getTodayMatches() : Matches
 
-    @GET("teams?limit=300")
-    suspend fun getTeams() : NetworkTeams
+    @GET("teams")
+    suspend fun getTeams(@Query("limit") limit: Int = 20, @Query("offset") offset: Int) : NetworkTeams
 
     @GET("competitions/PL/teams")
     suspend fun getPremierLeagueTeams() : NetworkTeamsByCompetition

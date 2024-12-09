@@ -15,21 +15,6 @@ import javax.inject.Singleton
 class MatchRepository @Inject constructor(val sportInfoApi: SportInfoApi) {
 
 
-    fun getPremierLeagueMatchList(): Flow<List<Match>> {
-        return flow {
-            val premierLeagueMatches =
-                try {
-                    sportInfoApi.getPremierLeagueMatches().matches
-                } catch (e: Exception) {
-                    null
-                }
-            premierLeagueMatches?.let {
-                emit(it)
-            }
-        }.flowOn(Dispatchers.IO)
-    }
-
-
     fun getTodayMatchList(): Flow<List<Match>> {
         return flow {
             val matches =

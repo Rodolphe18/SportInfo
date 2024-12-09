@@ -15,10 +15,10 @@ import javax.inject.Singleton
 class TeamRepository @Inject constructor(private val sportInfoApi: SportInfoApi) {
 
 
-    fun getTeamsList(): Flow<List<Team>> {
+    fun getTeamsList(offSet:Int): Flow<List<Team>> {
         return flow {
             val remoteTeamsList = try {
-                val result =  sportInfoApi.getTeams()
+                val result =  sportInfoApi.getTeams(offset = offSet)
                 Log.d("debug_", result.toString())
                 result
             } catch (e: Exception) {
