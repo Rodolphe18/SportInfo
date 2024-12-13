@@ -118,7 +118,7 @@ fun CompetitionMatchesScreen(
                 for (date in dayOfWeeks) {
                     MatchesPerDaySection(
                         date,
-                        uiState.matches.filter { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) == date })
+                        uiState.matches.filter { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) == date }.sortedBy { it.utcDate })
                 }
             }
         }
