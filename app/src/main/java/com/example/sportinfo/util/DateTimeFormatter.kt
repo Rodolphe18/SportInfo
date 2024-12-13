@@ -7,10 +7,10 @@ object DateTimeFormatter {
 
     fun getFormattedDate(value:String):String {
      val offSet = OffsetDateTime.parse(value)
-        val year = offSet.year
-        val month = if(offSet.month.name.lowercase() != "may") offSet.month.name.substring(0, 2) else "may"
+        val dayOfWeek = offSet.dayOfWeek.name.lowercase()
+        val month = offSet.month.name.lowercase()
         val dayOfMonth = offSet.dayOfMonth
-        val formattedDate = "$year - $month. - $dayOfMonth"
+        val formattedDate = "$dayOfWeek $dayOfMonth $month "
         return formattedDate
     }
 

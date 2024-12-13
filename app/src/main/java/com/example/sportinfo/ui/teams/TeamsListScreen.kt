@@ -114,7 +114,7 @@ fun TeamsSection(
     val listState = rememberLazyListState()
     Column(modifier = Modifier.padding(top = 10.dp)) {
         if (teams?.size != 0) {
-            SectionTitle(title)
+            SectionTitle(title = title)
             LazyRow(
                 state = listState,
                 contentPadding = PaddingValues(horizontal = 16.dp),

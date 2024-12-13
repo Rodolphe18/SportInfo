@@ -15,7 +15,7 @@ interface SportInfoApi {
     suspend fun getCompetitions() : NetworkCompetitions
 
     @GET("competitions/{competitionId}/matches")
-    suspend fun getCompetitionMatches(@Path("competitionId") competitionId : String, @Query("matchday") status: Int = 2) : Matches
+    suspend fun getCompetitionMatches(@Path("competitionId") competitionId : String, @Query("matchday") status: Int) : Matches
 
     @GET("matches")
     suspend fun getTodayMatches() : Matches

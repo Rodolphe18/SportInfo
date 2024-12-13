@@ -10,13 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun SectionTitle(title: String) {
+fun SectionTitle(modifier: Modifier = Modifier,title: String, fontWeight: FontWeight = FontWeight.ExtraBold, fontSize:TextUnit = 22.sp) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -24,8 +25,8 @@ fun SectionTitle(title: String) {
         Row(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 22.sp,
+                fontWeight = fontWeight,
+                fontSize = fontSize,
                 modifier = Modifier.padding(vertical = 10.dp),
                 color = Color.DarkGray
             )

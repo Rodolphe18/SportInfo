@@ -19,7 +19,7 @@ fun NavController.navigateToCompetitions(navOptions: NavOptions? = null) {
     this.navigate(CompetitionsNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.competitionsScreen(onCompetitionClick: (String) -> Unit, competitionMatchesDestination: NavGraphBuilder.() -> Unit) {
+fun NavGraphBuilder.competitionsScreen(onCompetitionClick: (String, String, Int) -> Unit, competitionMatchesDestination: NavGraphBuilder.() -> Unit) {
     navigation<BaseRoute>(startDestination = CompetitionsNavigationRoute) {
         composable<CompetitionsNavigationRoute>() {
             CompetitionsRoute(onCompetitionClick = onCompetitionClick)

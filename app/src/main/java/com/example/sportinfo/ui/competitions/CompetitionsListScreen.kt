@@ -17,14 +17,14 @@ import com.example.sportinfo.ui.composable.BigSportsInfoItem
 
 
 @Composable
-internal fun CompetitionsRoute(viewModel: CompetitionListViewModel = hiltViewModel(), onCompetitionClick:(String) -> Unit) {
+internal fun CompetitionsRoute(viewModel: CompetitionListViewModel = hiltViewModel(), onCompetitionClick:(String, String, Int) -> Unit) {
     val competitionState = viewModel.state
 
     CompetitionsListScreen(competitionState, onCompetitionClick)
 }
 
 @Composable
-fun CompetitionsListScreen(competitionsListState: CompetitionsListState, onCompetitionClick:(String) -> Unit) {
+fun CompetitionsListScreen(competitionsListState: CompetitionsListState, onCompetitionClick:(String, String, Int) -> Unit) {
     if (competitionsListState.isLoading) {
         CircularProgressIndicator()
     } else {

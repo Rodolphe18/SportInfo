@@ -29,11 +29,11 @@ class MatchRepository @Inject constructor(val sportInfoApi: SportInfoApi) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getCompetitionMatchList(competitionId: String): Flow<List<Match>> {
+    fun getCompetitionMatchList(competitionId: String, matchDay:Int): Flow<List<Match>> {
         return flow {
             val matches =
                 try {
-                    sportInfoApi.getCompetitionMatches(competitionId).matches
+                    sportInfoApi.getCompetitionMatches(competitionId, matchDay).matches
                 } catch (e: Exception) {
                     null
                 }

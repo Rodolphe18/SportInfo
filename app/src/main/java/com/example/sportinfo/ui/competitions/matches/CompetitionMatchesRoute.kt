@@ -7,10 +7,10 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CompetitionMatchesRoute(val competitionCode: String)
+data class CompetitionMatchesRoute(val competitionCode: String, val competitionName:String, val matchDay:Int)
 
-fun NavController.navigateToCompetitionMatches(competitionId: String, navOptions: NavOptionsBuilder.() -> Unit = {}) {
-    navigate(route = CompetitionMatchesRoute(competitionId)) {
+fun NavController.navigateToCompetitionMatches(competitionId: String, competitionName: String, matchDay:Int, navOptions: NavOptionsBuilder.() -> Unit = {}) {
+    navigate(route = CompetitionMatchesRoute(competitionId, competitionName, matchDay)) {
         navOptions()
     }
 }

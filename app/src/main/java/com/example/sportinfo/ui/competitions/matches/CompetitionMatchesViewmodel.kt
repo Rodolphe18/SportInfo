@@ -16,11 +16,16 @@ import javax.inject.Inject
 @HiltViewModel
 class CompetitionMatchesViewmodel @Inject constructor(savedStateHandle: SavedStateHandle, matchesRepository: MatchRepository):ViewModel() {
 
-    private var competitionCode = savedStateHandle.toRoute<CompetitionMatchesRoute>().competitionCode
+    private val competitionCode = savedStateHandle.toRoute<CompetitionMatchesRoute>().competitionCode
+
+    val matchDay = savedStateHandle.toRoute<CompetitionMatchesRoute>().matchDay
+
+    val competitionName = savedStateHandle.toRoute<CompetitionMatchesRoute>().competitionName
+
 
 
     var state: StateFlow<CompetitionMatchesUiState> =
-        matchesRepository.getCompetitionMatchList(competitionCode)
+        matchesRepository.getCompetitionMatchList(competitionCode, matchDay)
             .map { matches ->
                 CompetitionMatchesUiState(matches = matches.sortedByDescending { it.utcDate })
         }.stateIn(viewModelScope, WhileUiSubscribed, CompetitionMatchesUiState())

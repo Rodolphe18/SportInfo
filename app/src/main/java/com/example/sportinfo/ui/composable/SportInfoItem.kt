@@ -114,8 +114,8 @@ fun BigTeamsInfoItem(modifier: Modifier = Modifier, team: Team, onToggleFavorite
 }
 
 @Composable
-fun BigSportsInfoItem(competition: Competition, onToggleFavorite: (Competition, Boolean) -> Unit, onCompetitionClick:(String) -> Unit) {
-    Box(Modifier.height(150.dp).clip(shape = RoundedCornerShape(16.dp)).background(Color.White).clickable { onCompetitionClick(competition.code.orEmpty()) }) {
+fun BigSportsInfoItem(competition: Competition, onToggleFavorite: (Competition, Boolean) -> Unit, onCompetitionClick:(String, String, Int) -> Unit) {
+    Box(Modifier.height(150.dp).clip(shape = RoundedCornerShape(16.dp)).background(Color.White).clickable { onCompetitionClick(competition.code.orEmpty(), competition.name.orEmpty(), competition.currentSeason?.currentMatchday ?: 1) }) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(modifier = Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                 AsyncImage(

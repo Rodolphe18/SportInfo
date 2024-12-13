@@ -1,4 +1,4 @@
-package com.example.sportinfo.data
+package com.example.sportinfo.data.remote
 
 import com.example.sportinfo.data.remote.api.HttpLoggingInterceptor
 import com.example.sportinfo.data.remote.api.MyInterceptor

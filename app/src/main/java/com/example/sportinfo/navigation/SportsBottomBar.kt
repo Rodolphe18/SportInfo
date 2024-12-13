@@ -1,6 +1,5 @@
 package com.example.sportinfo.navigation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Flag

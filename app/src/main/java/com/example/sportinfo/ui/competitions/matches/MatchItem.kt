@@ -32,6 +32,7 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
             .height(110.dp)
             .padding(8.dp)
     ) {
+        Text(text = match.status.orEmpty())
         Row {
             Box(
                 modifier = Modifier
@@ -62,11 +63,6 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
                 overflow = TextOverflow.Ellipsis,
                 color = if(match.status == "LIVE") Color.Red else Color.Black,
             )
-            Text(
-                text = match.matchday.toString(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                overflow = TextOverflow.Ellipsis)
         }
         Spacer(modifier = Modifier.height(5.dp))
         Row {
