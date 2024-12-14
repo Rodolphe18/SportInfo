@@ -30,6 +30,7 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -96,7 +97,13 @@ fun CompetitionMatchesScreen(
                     imageVector = Icons.Filled.ArrowBackIosNew,
                     contentDescription = null
                 )
-            }, scrollBehavior = topAppBarScrollBehavior)
+            }, scrollBehavior = topAppBarScrollBehavior, colors = TopAppBarColors(
+                containerColor = Color(0xff9FBE5B),
+                scrolledContainerColor = Color(0xff9FBE5B),
+                navigationIconContentColor = Color.Black,
+                titleContentColor = Color.Black,
+                actionIconContentColor = Color.Black
+            ))
         }
     ) { padding ->
         LazyColumn(
@@ -133,7 +140,7 @@ fun MatchesPerDaySection(
 ) {
     Column(modifier = Modifier.padding(top = 10.dp)) {
         if (matches?.size != 0) {
-            SectionTitle(modifier = Modifier.background(Color(0xffBDDBFE)), title = date, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+            SectionTitle(modifier = Modifier.padding(bottom = 8.dp).background(Color(0xff9FBE5B).copy(alpha = 0.8f)), title = date, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             Column {
                 if (matches != null) {
                     for (match in matches) {

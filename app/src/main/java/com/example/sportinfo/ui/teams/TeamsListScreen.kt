@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,12 +66,12 @@ fun AllTeamsListScreen(
             viewModel.getTeams()
         }
     }
-    LazyColumn(state = listState) {
+    LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         items(state.teams) { team ->
             SmallTeamsInfoItem(modifier = Modifier.fillMaxWidth()
-                .height(100.dp)
-                .padding(horizontal = 12.dp, vertical = 6.dp)
-                .clip(shape = RoundedCornerShape(8.dp))
+                .height(80.dp)
+                .padding(horizontal = 12.dp)
+                .clip(shape = RoundedCornerShape(12.dp))
                 .background(Color.White), team = team) { _, _ -> }
         }
         if (viewModel.pageStatus == PageStatus.PAGINATING) {
@@ -93,6 +94,18 @@ fun TeamsByChampionshipListScreen(state:SortedTeamsUiState) {
         is SortedTeamsUiState.Success -> {
             val teams = state.teams
             val championships = enumValues<TeamType>()
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color(0xff9FBE5B),
+                                Color(0xffDFFF00)
+                            )
+                        )
+                    )
+            )
             LazyColumn() {
                 item {
                     for(championship in championships) {
@@ -125,7 +138,7 @@ fun TeamsSection(
                     key = { it.id }
                 ) { team ->
                     BigTeamsInfoItem(modifier = Modifier
-                        .width(320.dp)
+                        .width(280.dp)
                         .aspectRatio(2f)
                         .clip(shape = RoundedCornerShape(16.dp))
                         .background(Color.White), team, { _, _ -> })

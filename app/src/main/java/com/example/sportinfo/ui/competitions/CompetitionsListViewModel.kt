@@ -23,17 +23,22 @@ class CompetitionListViewModel @Inject constructor(
             repositoryInterface
                 .getCompetitionsList()
                 .collect { competitionList ->
-                competitionList.let { list ->
+                competitionList
+                    .filter { it.type == "LEAGUE" }
+                    .sortedBy { it.area?.parentArea == "EUROPE" }
+                    .reversed()
+                    .let { list ->
                     state = state.copy(competitions = list)
                 }
             }
+            state = state.copy(isLoading = false)
         }
     }
 }
 
 data class CompetitionsListState(
     val competitions : List<Competition> = emptyList(),
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing : Boolean = false,
     val searchQuery: String = ""
 )

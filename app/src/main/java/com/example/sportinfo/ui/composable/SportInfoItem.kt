@@ -35,10 +35,17 @@ import com.francotte.android.sportinfo.R
 
 
 @Composable
-fun SmallTeamsInfoItem(modifier: Modifier = Modifier, team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
+fun SmallTeamsInfoItem(
+    modifier: Modifier = Modifier,
+    team: Team,
+    onToggleFavorite: (Team, Boolean) -> Unit
+) {
     Box(modifier) {
         Column(modifier = Modifier.padding(8.dp)) {
-            Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 AsyncImage(
                     modifier = Modifier.size(25.dp),
                     model = ImageRequest.Builder(LocalContext.current)
@@ -71,16 +78,26 @@ fun SmallTeamsInfoItem(modifier: Modifier = Modifier, team: Team, onToggleFavori
             )
         }
         FavoriteButton(modifier = Modifier
-            .align(Alignment.TopEnd).padding(4.dp),isFavorite = team.isFavorite, onToggleFavorite = { checked -> onToggleFavorite(team, checked) })
+            .align(Alignment.TopEnd)
+            .padding(4.dp),
+            isFavorite = team.isFavorite,
+            onToggleFavorite = { checked -> onToggleFavorite(team, checked) })
 
     }
 }
 
 @Composable
-fun BigTeamsInfoItem(modifier: Modifier = Modifier, team: Team, onToggleFavorite: (Team, Boolean) -> Unit) {
+fun BigTeamsInfoItem(
+    modifier: Modifier = Modifier,
+    team: Team,
+    onToggleFavorite: (Team, Boolean) -> Unit
+) {
     Box(modifier) {
         Column(modifier = Modifier.padding(8.dp)) {
-            Row(modifier = Modifier.padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.width(190.dp).padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 AsyncImage(
                     modifier = Modifier.size(25.dp),
                     model = ImageRequest.Builder(LocalContext.current)
@@ -93,7 +110,8 @@ fun BigTeamsInfoItem(modifier: Modifier = Modifier, team: Team, onToggleFavorite
                     modifier = Modifier.padding(start = 6.dp),
                     text = team.name.orEmpty(),
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 20.sp
+                    fontSize = 18.sp,
+                    maxLines = 2
                 )
             }
             Text(
@@ -108,16 +126,37 @@ fun BigTeamsInfoItem(modifier: Modifier = Modifier, team: Team, onToggleFavorite
             )
         }
         FavoriteButton(modifier = Modifier
-            .align(Alignment.TopEnd).padding(4.dp),isFavorite = team.isFavorite, onToggleFavorite = { checked -> onToggleFavorite(team, checked) })
+            .align(Alignment.TopEnd)
+            .padding(4.dp),
+            isFavorite = team.isFavorite,
+            onToggleFavorite = { checked -> onToggleFavorite(team, checked) })
 
     }
 }
 
 @Composable
-fun BigSportsInfoItem(competition: Competition, onToggleFavorite: (Competition, Boolean) -> Unit, onCompetitionClick:(String, String, Int) -> Unit) {
-    Box(Modifier.height(150.dp).clip(shape = RoundedCornerShape(16.dp)).background(Color.White).clickable { onCompetitionClick(competition.code.orEmpty(), competition.name.orEmpty(), competition.currentSeason?.currentMatchday ?: 1) }) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Row(modifier = Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+fun BigSportsInfoItem(
+    competition: Competition,
+    onToggleFavorite: (Competition, Boolean) -> Unit,
+    onCompetitionClick: (String, String, Int) -> Unit
+) {
+    Box(
+        Modifier
+            .height(115.dp)
+            .clip(shape = RoundedCornerShape(16.dp))
+            .background(Color.White)
+            .clickable {
+                onCompetitionClick(
+                    competition.code.orEmpty(),
+                    competition.name.orEmpty(),
+                    competition.currentSeason?.currentMatchday ?: 1
+                )
+            }) {
+        Column(modifier = Modifier.padding(start = 8.dp,end = 8.dp, top = 6.dp)) {
+            Row(
+                modifier = Modifier.padding(top = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 AsyncImage(
                     modifier = Modifier.size(40.dp),
                     model = ImageRequest.Builder(LocalContext.current)
@@ -127,42 +166,55 @@ fun BigSportsInfoItem(competition: Competition, onToggleFavorite: (Competition, 
                     contentDescription = null
                 )
                 Text(
-                    modifier = Modifier.padding(start = 6.dp),
+                    modifier = Modifier.padding(start = 8.dp),
                     text = competition.name.orEmpty(),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                    fontSize = 20.sp
                 )
             }
-            Text(
-                text = competition.area?.name?.uppercase().orEmpty(),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
-            Text(
-                text = NumberFormatter.getFormattedDay(competition.currentSeason?.currentMatchday ?: 0),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
-            SportsInfoMetaData(competition)
+            SportsInfoMetaData1(competition)
+            SportsInfoMetaData2(competition)
         }
         FavoriteButton(modifier = Modifier
-            .align(Alignment.BottomEnd).padding(4.dp),isFavorite = competition.isFavorite, onToggleFavorite = { checked -> onToggleFavorite(competition, checked) })
+            .align(Alignment.BottomEnd)
+            .padding(4.dp),
+            isFavorite = competition.isFavorite,
+            onToggleFavorite = { checked -> onToggleFavorite(competition, checked) })
     }
 }
 
 @Composable
-fun SportsInfoMetaData(
+fun SportsInfoMetaData1(
+    competition: Competition
+) {
+    val country = competition.area?.name?.uppercase().orEmpty()
+    val matchDay = NumberFormatter.getFormattedDay(
+        competition.currentSeason?.currentMatchday ?: 0
+    )
+
+    Text(
+        modifier = Modifier.padding(top = 4.dp),
+        text = stringResource(R.string.card_meta_data_text, country, matchDay),
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        maxLines = 1,
+    )
+}
+
+@Composable
+fun SportsInfoMetaData2(
     competition: Competition
 ) {
     val date = DateTimeFormatter.getFormattedDate(competition.lastUpdated.orEmpty()).lowercase()
     val type = competition.type.orEmpty()
 
     Text(
-        modifier = Modifier.padding(vertical = 2.dp),
         text = stringResource(R.string.card_meta_data_text, type, date),
         fontWeight = FontWeight.Medium,
         fontSize = 10.sp,
         maxLines = 1,
     )
 }
+
+
 

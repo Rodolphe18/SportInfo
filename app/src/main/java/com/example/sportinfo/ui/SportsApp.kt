@@ -50,10 +50,6 @@ fun SportsApp(
     val snackbarHostState = remember { SnackbarHostState() }
 
     Box(Modifier.fillMaxSize()) {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(Brush.verticalGradient(listOf(Color(0xFFBDDBFE),Color(0xFFE3E8F2)))))
         Scaffold(
             modifier = Modifier.semantics {
                 testTagsAsResourceId = true
@@ -74,8 +70,8 @@ fun SportsApp(
                             id = R.string.settings
                         ),
                         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            containerColor = Color.Transparent
-                        ),
+                            containerColor = Color(0xff9FBE5B)
+                    ),
                         onActionClick = { appState.setShowSettingsDialog(true) }
                     )
                 }
@@ -83,7 +79,7 @@ fun SportsApp(
             bottomBar = {
                 if (appState.shouldShowBottomBar) {
                     SportsBottomBar(
-                        modifier = Modifier.drawBehind {  Color(0xFFBDDBFE) },
+                        modifier = Modifier.drawBehind { Color(0xff9FBE5B) },
                         destinations = appState.topLevelDestinations,
                         onNavigateToDestination = appState::navigateToTopLevelDestination,
                         currentDestination = appState.currentDestination

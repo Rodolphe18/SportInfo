@@ -44,13 +44,12 @@ fun TwoPansPager(
             selectedTabIndex = pagerState.currentPage
     }
     Column(modifier = modifier.fillMaxWidth()) {
-        Spacer(modifier = modifier.height(12.dp))
         TabRow(
-            modifier = modifier.fillMaxWidth().background(Color(0xFFBDDBFE)), selectedTabIndex = selectedTabIndex
+            modifier = modifier.fillMaxWidth().background(Color(0xff9FBE5B)), selectedTabIndex = selectedTabIndex
         ) {
             tabItem.forEachIndexed { index, _ ->
                 Tab(
-                    modifier = Modifier.background(Color(0xFFBDDBFE)),
+                    modifier = Modifier.background(Color(0xff9FBE5B)),
                     selected = index == selectedTabIndex,
                     onClick = {
                         selectedTabIndex = index
@@ -65,7 +64,6 @@ fun TwoPansPager(
                     })
             }
         }
-        Spacer(Modifier.height(8.dp))
         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth()) { index ->
             if (index == 0) {
                 page1()

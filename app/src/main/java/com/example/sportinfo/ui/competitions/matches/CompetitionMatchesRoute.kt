@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
+import com.example.sportinfo.ui.competitions.pager.PagerMatchDay
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,6 +18,6 @@ fun NavController.navigateToCompetitionMatches(competitionId: String, competitio
 
 fun NavGraphBuilder.competitionMatchesScreen(onBackClick:() -> Unit) {
     composable<CompetitionMatchesRoute> {
-        CompetitionMatchesScreen(onBackClick = onBackClick)
+        PagerMatchDay()
     }
 }

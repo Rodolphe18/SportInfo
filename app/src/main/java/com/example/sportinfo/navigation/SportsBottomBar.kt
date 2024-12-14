@@ -47,11 +47,11 @@ fun RowScope.SportsNavigationBarItem(
         label = label,
         alwaysShowLabel = alwaysShowLabel,
         colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.White,
+            selectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
             unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            selectedTextColor = Color(0xFF6200EE),
+            selectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
             unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            indicatorColor = Color(0xFFBB86FC))
+            indicatorColor = Color(0xffDFFF00))
     )
 }
 
@@ -62,8 +62,8 @@ fun SportsNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = Color(0xFFE3E8F2),
-        contentColor = Color(0xFFE3E8F2),
+        containerColor = Color(0xff9FBE5B),
+        contentColor = Color(0xff9FBE5B),
         tonalElevation = 0.dp,
         content = content
     )
