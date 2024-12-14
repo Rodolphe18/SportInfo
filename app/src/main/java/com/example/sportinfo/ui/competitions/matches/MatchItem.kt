@@ -23,20 +23,26 @@ import coil.request.ImageRequest
 import com.example.sportinfo.data.remote.dto.matches.Match
 import com.example.sportinfo.domain.model.Competition
 import com.example.sportinfo.util.DateTimeFormatter
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.util.Date
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun MatchItem(match: Match, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(110.dp)
+            .height(120.dp)
             .padding(8.dp)
     ) {
-        Text(text = match.status.orEmpty())
         Row {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(30.dp)
                     .padding(horizontal = 4.dp)
                     .weight(0.5f)
             ) {
@@ -58,17 +64,17 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
             Text(
                 modifier = Modifier.weight(0.2f),
                 text = match.score?.fullTime?.home.toString(),
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.ExtraBold,
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,
-                color = if(match.status == "LIVE") Color.Red else Color.Black,
+                color = Color.Black,
             )
         }
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         Row {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(30.dp)
                     .padding(horizontal = 4.dp)
                     .weight(0.5f)
             ) {
@@ -90,19 +96,12 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
             Text(
                 modifier = Modifier.weight(0.2f),
                 text = match.score?.fullTime?.away.toString(),
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.ExtraBold,
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,
-                color = if(match.status == "LIVE") Color.Red else Color.Black,
+                color = Color.Black,
             )
         }
-        Text(
-            text = match.venue.orEmpty(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
-            overflow = TextOverflow.Ellipsis,
-            color = Color.Black,
-        )
     }
 }
 
