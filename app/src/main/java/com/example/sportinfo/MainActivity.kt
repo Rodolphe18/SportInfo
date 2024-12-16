@@ -14,6 +14,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,9 +34,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
     private val competitionsViewModel: CompetitionListViewModel by viewModels()
-
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,12 +46,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SportInfoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
+                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SportsApp(windowSizeClass = calculateWindowSizeClass(this))
+                    var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
+
+                    SportsApp(windowSizeClass = calculateWindowSizeClass(this), showSettingsDialog = showSettingsDialog, onSettingsDismissed = { showSettingsDialog = false }, onTopAppBarActionClick = { showSettingsDialog = true })
                 }
             }
         }

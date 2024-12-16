@@ -5,8 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,19 +39,21 @@ fun SmallTeamsInfoItem(
     onToggleFavorite: (Team, Boolean) -> Unit
 ) {
     Box(modifier) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(modifier = Modifier.padding(horizontal = 8.dp)) {
             Row(
                 modifier = Modifier.padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                AsyncImage(
-                    modifier = Modifier.size(25.dp),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(team.crest)
-                        .build(),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = null
-                )
+                if(team.crest?.isNotEmpty() == true) {
+                    AsyncImage(
+                        modifier = Modifier.size(25.dp),
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(team.crest)
+                            .build(),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = null
+                    )
+                }
                 Text(
                     modifier = Modifier.padding(start = 6.dp),
                     text = team.name.orEmpty(),
@@ -66,16 +66,22 @@ fun SmallTeamsInfoItem(
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp
             )
-            Text(
-                text = team.area?.name.orEmpty(),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
-            Text(
-                text = team.runningCompetitions.map { it?.name }.joinToString(" | "),
-                fontSize = 12.sp,
-                overflow = TextOverflow.Ellipsis
-            )
+            team.area?.name?.let {
+                Text(
+                    text = it,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp
+                )
+            }
+            team.runningCompetitions.mapNotNull { it?.name }.joinToString(" | ").let {
+                Text(
+                    text = it,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
         }
         FavoriteButton(modifier = Modifier
             .align(Alignment.TopEnd)

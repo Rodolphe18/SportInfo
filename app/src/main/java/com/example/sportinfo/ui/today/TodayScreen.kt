@@ -61,7 +61,7 @@ fun TodaySection(
 ) {
     Column(modifier = Modifier.padding(top = 10.dp)) {
         if (matches?.size != 0) {
-            SectionTitle(modifier = Modifier.background(Color(0xff9FBE5B).copy(alpha = 0.8f)), title = title)
+            SectionTitle(modifier = Modifier.background(Color(0xff9FBE5B).copy(alpha = 0.4f)), title = title)
             Column {
                 if (matches != null) {
                     for (match in matches) {

@@ -44,7 +44,7 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .size(30.dp)
                     .padding(horizontal = 4.dp)
-                    .weight(0.5f)
+                    .weight(0.3f)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -54,7 +54,7 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
                 )
             }
             Text(
-                modifier = Modifier.weight(1.3f),
+                modifier = Modifier.weight(1.5f),
                 text = match.homeTeam.name.orEmpty(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
@@ -76,7 +76,7 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .size(30.dp)
                     .padding(horizontal = 4.dp)
-                    .weight(0.5f)
+                    .weight(0.3f)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -86,7 +86,7 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
                 )
             }
             Text(
-                modifier = Modifier.weight(1.3f),
+                modifier = Modifier.weight(1.5f),
                 text = match.awayTeam.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
@@ -129,6 +129,7 @@ fun ScheduledMatchItem(match: Match, modifier: Modifier = Modifier) {
                     )
                 }
                 Text(
+                    modifier = Modifier.padding(start = 18.dp),
                     text = match.homeTeam.name.orEmpty(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
@@ -151,6 +152,7 @@ fun ScheduledMatchItem(match: Match, modifier: Modifier = Modifier) {
                     )
                 }
                 Text(
+                    modifier = Modifier.padding(start = 18.dp),
                     text = match.awayTeam.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,

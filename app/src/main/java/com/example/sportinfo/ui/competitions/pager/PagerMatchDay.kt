@@ -60,13 +60,13 @@ fun PagerMatchDay(viewmodel: PagerViewmodel = hiltViewModel()) {
                     )
                 }
             }
-            item {
-                for (date in dayOfWeeks) {
-                    MatchesPerDaySection(
-                        date,
-                        dayMatchMatches.filter { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) == date }.sortedBy { it.utcDate })
-                }
-            }
+//            item {
+//                for (date in dayOfWeeks) {
+//                    MatchesPerDaySection(
+//                        date,
+//                        dayMatchMatches.filter { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) == date }.sortedBy { it.utcDate })
+//                }
+//            }
         }
     }
 }

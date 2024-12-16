@@ -18,6 +18,6 @@ fun NavController.navigateToCompetitionMatches(competitionId: String, competitio
 
 fun NavGraphBuilder.competitionMatchesScreen(onBackClick:() -> Unit) {
     composable<CompetitionMatchesRoute> {
-        PagerMatchDay()
+        CompetitionMatchesScreen { onBackClick() }
     }
 }

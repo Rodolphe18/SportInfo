@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun SectionTitle(modifier: Modifier = Modifier,title: String, fontWeight: FontWeight = FontWeight.ExtraBold, fontSize:TextUnit = 22.sp) {
+fun SectionTitle(modifier: Modifier = Modifier,title: String, fontWeight: FontWeight = FontWeight.ExtraBold, fontSize:TextUnit = 18.sp) {
     Row(
         modifier = modifier
             .fillMaxWidth()

@@ -100,8 +100,8 @@ fun TeamsByChampionshipListScreen(state:SortedTeamsUiState) {
                     .background(
                         Brush.verticalGradient(
                             listOf(
-                                Color(0xff9FBE5B),
-                                Color(0xffDFFF00)
+                                Color(0xff9FBE5B).copy(0.3f),
+                                Color(0xffDFFF00).copy(0.3f)
                             )
                         )
                     )

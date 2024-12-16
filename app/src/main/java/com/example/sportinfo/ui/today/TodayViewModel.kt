@@ -22,7 +22,7 @@ class TodayViewModel @Inject constructor(matchRepository: MatchRepository) : Vie
 
 sealed interface TodayUiState {
 
-    object Loading : TodayUiState
+    data object Loading : TodayUiState
     data class Success(
         val matches:List<Match>
     ) : TodayUiState

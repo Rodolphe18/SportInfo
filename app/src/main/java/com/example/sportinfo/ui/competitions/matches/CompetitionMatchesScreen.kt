@@ -1,6 +1,7 @@
 package com.example.sportinfo.ui.competitions.matches
 
 import android.widget.Toolbar
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -68,7 +69,7 @@ internal fun CompetitionMatchesScreen(
     CompetitionMatchesScreen(competitionMatchesState, competitionName, matchDay, onBackClick)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CompetitionMatchesScreen(
     uiState: CompetitionMatchesUiState,
@@ -76,10 +77,8 @@ fun CompetitionMatchesScreen(
     matchDay: Int,
     onBackClick: () -> Unit
 ) {
-    val topAppBarScrollBehavior =
-        TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val state = rememberLazyListState()
-    val dayOfWeeks = uiState.matches.map { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) }.distinct().reversed()
     Scaffold(
         modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
         topBar = {
@@ -121,27 +120,26 @@ fun CompetitionMatchesScreen(
                     color = Color.DarkGray
                 ) }
             }
-            item {
-                for (date in dayOfWeeks) {
-                    MatchesPerDaySection(
-                        date,
-                        uiState.matches.filter { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) == date }.sortedBy { it.utcDate })
+            uiState.matches
+                .groupBy { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) }
+                .toSortedMap()
+                .forEach { (key, value) ->
+                item(key = key) {
+                    SectionTitle(modifier = Modifier.padding(bottom = 8.dp).background(Color(0xff9FBE5B).copy(alpha = 0.8f)), title = key.toString(), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+                }
+                items(value) {
+                        MatchesPerDaySection(value.sortedBy { it.utcDate })
                 }
             }
         }
-
     }
 }
 
 @Composable
-fun MatchesPerDaySection(
-    date: String,
-    matches: List<Match>?,
-) {
+fun MatchesPerDaySection(matches: List<Match>?) {
     Column(modifier = Modifier.padding(top = 10.dp)) {
         if (matches?.size != 0) {
-            SectionTitle(modifier = Modifier.padding(bottom = 8.dp).background(Color(0xff9FBE5B).copy(alpha = 0.8f)), title = date, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-            Column {
+           Column {
                 if (matches != null) {
                     for (match in matches) {
                         when (match.status) {

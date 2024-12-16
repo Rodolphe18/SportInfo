@@ -45,11 +45,11 @@ fun TwoPansPager(
     }
     Column(modifier = modifier.fillMaxWidth()) {
         TabRow(
-            modifier = modifier.fillMaxWidth().background(Color(0xff9FBE5B)), selectedTabIndex = selectedTabIndex
+            modifier = modifier.fillMaxWidth().background(Color(0xff9FBE5B).copy(alpha = 0.3f)), selectedTabIndex = selectedTabIndex
         ) {
             tabItem.forEachIndexed { index, _ ->
                 Tab(
-                    modifier = Modifier.background(Color(0xff9FBE5B)),
+                    modifier = Modifier.background(Color(0xff9FBE5B).copy(0.3f)),
                     selected = index == selectedTabIndex,
                     onClick = {
                         selectedTabIndex = index
