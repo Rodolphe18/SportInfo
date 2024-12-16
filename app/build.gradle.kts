@@ -1,3 +1,6 @@
+import org.gradle.internal.extensions.stdlib.capitalized
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
@@ -5,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt.plugin)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.protobuf)
     id("kotlin-parcelize")
 }
 
@@ -83,6 +87,7 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.datetime)
     testImplementation(libs.kotlinx.coroutines.test)
 
     implementation(libs.hilt.android)
@@ -90,13 +95,44 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
 
     implementation(libs.hilt.plugin)
+    implementation(libs.androidx.dataStore)
+    implementation(libs.protobuf.kotlin.lite)
 
     ksp(libs.hilt.compiler)
     debugImplementation(libs.androidx.compose.ui.testManifest)
     androidTestImplementation(kotlin("test"))
     androidTestImplementation(libs.androidx.navigation.testing)
 
-    implementation("com.google.code.gson:gson:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation(libs.gson)
+    implementation(libs.converter.gson)
 
+}
+
+protobuf {
+    protoc {
+        artifact = libs.protobuf.protoc.get().toString()
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        afterEvaluate {
+            val capName = variant.name.capitalized()
+            tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
+                setSource(tasks.getByName("generate${capName}Proto").outputs)
+            }
+        }
+    }
 }
