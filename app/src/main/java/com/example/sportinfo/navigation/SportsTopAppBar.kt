@@ -1,6 +1,8 @@
 package com.example.sportinfo.navigation
 
 import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,7 +26,8 @@ fun SportsTopAppBar(
     actionIconContentDescription: String?,
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
-    onActionClick: () -> Unit = {}
+    onActionClick: () -> Unit = {},
+    onNavigationClick:() -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(id = titleRes), fontSize = 20.sp, fontWeight = FontWeight.ExtraBold) },
@@ -34,6 +37,15 @@ fun SportsTopAppBar(
                     imageVector = actionIcon,
                     contentDescription = actionIconContentDescription,
                     tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = onNavigationClick) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
         },

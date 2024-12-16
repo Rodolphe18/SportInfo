@@ -1,6 +1,5 @@
 package com.example.sportinfo.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -23,18 +22,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.zIndex
+import com.example.sportinfo.navigation.SportsAppState
 import com.example.sportinfo.navigation.SportsBottomBar
 import com.example.sportinfo.navigation.SportsIcons
 import com.example.sportinfo.navigation.SportsNavHost
 import com.example.sportinfo.navigation.SportsTopAppBar
-import com.example.sportinfo.navigation.SportsAppState
 import com.example.sportinfo.navigation.rememberSportsAppState
+import com.example.sportinfo.ui.settings.SettingsDialog
 import com.francotte.android.sportinfo.R
 
 @OptIn(
@@ -44,10 +43,19 @@ import com.francotte.android.sportinfo.R
 @Composable
 fun SportsApp(
     windowSizeClass: WindowSizeClass,
+    onTopAppBarActionClick: () -> Unit,
+    onSettingsDismissed: () -> Unit,
+    showSettingsDialog: Boolean,
     appState: SportsAppState = rememberSportsAppState(windowSizeClass = windowSizeClass)
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
+
+    if (showSettingsDialog) {
+        SettingsDialog(
+            onDismiss = { onSettingsDismissed() },
+        )
+    }
 
     Box(Modifier.fillMaxSize()) {
         Scaffold(
@@ -61,6 +69,7 @@ fun SportsApp(
             topBar = {
                 // Show the top app bar on top level destinations.
                 val destination = appState.currentTopLevelDestination
+
                 if (destination != null) {
                     SportsTopAppBar(
                         modifier = Modifier.zIndex(-1F),
@@ -70,9 +79,10 @@ fun SportsApp(
                             id = R.string.settings
                         ),
                         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            containerColor = Color(0xff9FBE5B)
+                            containerColor = Color(0xff9FBE5B).copy(0.7f)
                     ),
-                        onActionClick = { appState.setShowSettingsDialog(true) }
+                        onActionClick = onTopAppBarActionClick,
+                        onNavigationClick = { appState.navigateToSearch() }
                     )
                 }
             },

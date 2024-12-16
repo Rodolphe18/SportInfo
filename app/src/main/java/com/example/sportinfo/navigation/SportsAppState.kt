@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.sportinfo.ui.competitions.navigateToCompetitions
 import com.example.sportinfo.ui.favorites.navigateToFavorites
+import com.example.sportinfo.ui.search.navigateToSearch
 import com.example.sportinfo.ui.teams.navigateToTeams
 import com.example.sportinfo.ui.today.navigateToToday
 import kotlinx.coroutines.CoroutineScope
@@ -108,4 +109,7 @@ class SportsAppState(
     fun setShowSettingsDialog(shouldShow: Boolean) {
         shouldShowSettingsDialog = shouldShow
     }
+
+    fun navigateToSearch() = navController.navigateToSearch()
+
 }
