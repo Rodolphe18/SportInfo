@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -27,18 +26,19 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.sportinfo.domain.model.Competition
 import com.example.sportinfo.domain.model.Team
+import com.example.sportinfo.ui.theme.LocalItemColor
 import com.example.sportinfo.util.DateTimeFormatter
 import com.example.sportinfo.util.NumberFormatter
 import com.francotte.android.sportinfo.R
 
 
 @Composable
-fun SmallTeamsInfoItem(
+fun SmallTeamInfoItem(
     modifier: Modifier = Modifier,
     team: Team,
     onToggleFavorite: (Team, Boolean) -> Unit
 ) {
-    Box(modifier) {
+    Box(modifier.background(LocalItemColor.current.itemColor)) {
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
             Row(
                 modifier = Modifier.padding(vertical = 4.dp),
@@ -93,12 +93,12 @@ fun SmallTeamsInfoItem(
 }
 
 @Composable
-fun BigTeamsInfoItem(
+fun BigTeamInfoItem(
     modifier: Modifier = Modifier,
     team: Team,
     onToggleFavorite: (Team, Boolean) -> Unit
 ) {
-    Box(modifier) {
+    Box(modifier.background(LocalItemColor.current.itemColor)) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row(
                 modifier = Modifier.width(190.dp).padding(vertical = 4.dp),
@@ -141,7 +141,7 @@ fun BigTeamsInfoItem(
 }
 
 @Composable
-fun BigSportsInfoItem(
+fun CompetitionItem(
     competition: Competition,
     onToggleFavorite: (Competition, Boolean) -> Unit,
     onCompetitionClick: (String, String, Int) -> Unit
@@ -150,7 +150,7 @@ fun BigSportsInfoItem(
         Modifier
             .height(115.dp)
             .clip(shape = RoundedCornerShape(16.dp))
-            .background(Color.White)
+            .background(LocalItemColor.current.itemColor)
             .clickable {
                 onCompetitionClick(
                     competition.code.orEmpty(),

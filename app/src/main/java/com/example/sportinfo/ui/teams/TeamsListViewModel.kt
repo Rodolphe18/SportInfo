@@ -32,8 +32,6 @@ class TeamsListViewModel @Inject constructor(private val teamRepository: TeamRep
 
 
     private val _state = MutableStateFlow(TeamsUiState(emptyList()))
-
-
     val state = _state.stateIn(viewModelScope, WhileUiSubscribed, TeamsUiState(emptyList()))
 
     private var page by mutableIntStateOf(1)

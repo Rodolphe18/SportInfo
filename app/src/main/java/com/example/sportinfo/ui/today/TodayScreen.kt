@@ -11,17 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.sportinfo.data.remote.dto.matches.Match
-import com.example.sportinfo.ui.competitions.matches.MatchItem
-import com.example.sportinfo.ui.competitions.matches.ScheduledMatchItem
+import com.example.sportinfo.ui.composable.MatchItem
+import com.example.sportinfo.ui.composable.ScheduledMatchItem
 import com.example.sportinfo.ui.composable.SectionTitle
 import com.example.sportinfo.ui.teams.TeamType
+import com.example.sportinfo.ui.theme.LocalGradientColors
+import com.example.sportinfo.ui.theme.SportInfoGradientBackground
 
 @Composable
 internal fun TodayRoute(viewModel: TodayViewModel = hiltViewModel()) {
@@ -38,8 +38,8 @@ fun TodayScreen(uiState: TodayUiState) {
         ) { CircularProgressIndicator() }
 
         is TodayUiState.Success ->
-            Box(Modifier.background(Color.White)){
-                LazyColumn {
+            SportInfoGradientBackground(gradientColors = LocalGradientColors.current) {
+            LazyColumn {
                     item {
                         val teamsType = enumValues<TeamType>()
                         for (teamType in teamsType) {
@@ -67,7 +67,7 @@ fun TodaySection(
                     for (match in matches) {
                         when (match.status) {
                             "TIMED" -> ScheduledMatchItem(match)
-                            else -> MatchItem(match)
+                            else -> MatchItem(match = match)
                         }
                     }
                 }

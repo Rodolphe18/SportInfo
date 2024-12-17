@@ -68,8 +68,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.sportinfo.domain.model.Competition
 import com.example.sportinfo.domain.model.Team
-import com.example.sportinfo.ui.composable.BigSportsInfoItem
-import com.example.sportinfo.ui.composable.SmallTeamsInfoItem
+import com.example.sportinfo.ui.composable.CompetitionItem
+import com.example.sportinfo.ui.composable.SmallTeamInfoItem
 import com.francotte.android.sportinfo.R
 
 @Composable
@@ -280,7 +280,7 @@ private fun SearchResultBody(
                         key = "team-$teamId",
                         span = StaggeredGridItemSpan.FullLine,
                     ) {
-                        SmallTeamsInfoItem(modifier = Modifier.border(width = Dp.Hairline, shape = MaterialTheme.shapes.large, color = Color(0xff9FBE5B)).background(Color.White), team = team) { _, _ -> }
+                        SmallTeamInfoItem(modifier = Modifier.border(width = Dp.Hairline, shape = MaterialTheme.shapes.large, color = Color(0xff9FBE5B)), team = team) { _, _ -> }
                     }
                 }
             }
@@ -305,7 +305,7 @@ private fun SearchResultBody(
                         key = "competition-$competitionId",
                         span = StaggeredGridItemSpan.FullLine,
                     ) {
-                        BigSportsInfoItem(competition = competition, {_,_-> }, {_,_,_ ->})
+                        CompetitionItem(competition = competition, { _, _-> }, { _, _, _ ->})
                     }
                 }
             }

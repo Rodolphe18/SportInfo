@@ -17,8 +17,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.sportinfo.domain.model.Competition
-import com.example.sportinfo.ui.composable.BigSportsInfoItem
+import com.example.sportinfo.ui.composable.CompetitionItem
+import com.example.sportinfo.ui.theme.LocalGradientColors
+import com.example.sportinfo.ui.theme.SportInfoGradientBackground
 
 
 @Composable
@@ -28,7 +29,9 @@ internal fun CompetitionsRoute(
 ) {
     val competitionState = viewModel.state
 
-    CompetitionsListScreen(competitionState, onCompetitionClick)
+    SportInfoGradientBackground(gradientColors = LocalGradientColors.current) {
+        CompetitionsListScreen(competitionState, onCompetitionClick)
+    }
 }
 
 @Composable
@@ -39,18 +42,6 @@ fun CompetitionsListScreen(
     if (competitionsListState.isLoading) {
         CircularProgressIndicator()
     } else {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color(0xff9FBE5B).copy(alpha = 0.3F),
-                            Color(0xffDFFF00).copy(alpha = 0.3F)
-                        )
-                    )
-                )
-        )
         LazyVerticalGrid(
             modifier = Modifier.padding(horizontal = 8.dp),
             columns = GridCells.Fixed(1),
@@ -59,7 +50,7 @@ fun CompetitionsListScreen(
             contentPadding = PaddingValues(8.dp)
         ) {
             items(items = competitionsListState.competitions) { competition ->
-                BigSportsInfoItem(competition, { _, _ -> }, onCompetitionClick)
+                CompetitionItem(competition, { _, _ -> }, onCompetitionClick)
 
             }
         }

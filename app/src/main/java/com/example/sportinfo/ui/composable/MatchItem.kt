@@ -1,9 +1,11 @@
-package com.example.sportinfo.ui.competitions.matches
+package com.example.sportinfo.ui.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,31 +14,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.sportinfo.data.remote.dto.matches.Match
-import com.example.sportinfo.domain.model.Competition
+import com.example.sportinfo.ui.theme.LocalItemColor
 import com.example.sportinfo.util.DateTimeFormatter
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.util.Date
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun MatchItem(match: Match, modifier: Modifier = Modifier) {
+fun MatchItem(modifier: Modifier = Modifier, match: Match, isLive: Boolean = false) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .height(120.dp)
+            .background(LocalItemColor.current.itemColor)
             .padding(8.dp)
     ) {
         Row {
@@ -59,16 +57,25 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
                 overflow = TextOverflow.Ellipsis,
-                color = Color.Black,
             )
-            Text(
-                modifier = Modifier.weight(0.2f),
-                text = match.score?.fullTime?.home.toString(),
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 15.sp,
-                overflow = TextOverflow.Ellipsis,
-                color = Color.Black,
-            )
+            Box(
+                modifier = Modifier
+                    .weight(0.2f)
+                    .size(10.dp)
+                    .padding(4.dp)
+                    .aspectRatio(1f)
+                    .background(color = if (isLive) Color.Red else Color.Black),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = match.score?.fullTime?.home.toString(),
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 15.sp,
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.White,
+                )
+            }
         }
         Spacer(modifier = Modifier.height(12.dp))
         Row {
@@ -90,17 +97,25 @@ fun MatchItem(match: Match, modifier: Modifier = Modifier) {
                 text = match.awayTeam.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
-                overflow = TextOverflow.Ellipsis,
-                color = Color.Black,
+                overflow = TextOverflow.Ellipsis
             )
-            Text(
-                modifier = Modifier.weight(0.2f),
-                text = match.score?.fullTime?.away.toString(),
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 15.sp,
-                overflow = TextOverflow.Ellipsis,
-                color = Color.Black,
-            )
+            Box(
+                modifier = Modifier
+                    .weight(0.2f)
+                    .size(10.dp)
+                    .padding(4.dp)
+                    .aspectRatio(1f)
+                    .background(color = if (isLive) Color.Red else Color.Black),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = match.score?.fullTime?.away.toString(),
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 15.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.White,
+                )
+            }
         }
     }
 }
@@ -133,8 +148,7 @@ fun ScheduledMatchItem(match: Match, modifier: Modifier = Modifier) {
                     text = match.homeTeam.name.orEmpty(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Black,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             Spacer(modifier = Modifier.height(5.dp))
@@ -156,11 +170,14 @@ fun ScheduledMatchItem(match: Match, modifier: Modifier = Modifier) {
                     text = match.awayTeam.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Black,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
-        Text(modifier = Modifier.weight(0.2f),text = DateTimeFormatter.getFormattedTime(match.utcDate.orEmpty()), fontWeight = FontWeight.SemiBold)
+        Text(
+            modifier = Modifier.weight(0.2f),
+            text = DateTimeFormatter.getFormattedTime(match.utcDate.orEmpty()),
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }

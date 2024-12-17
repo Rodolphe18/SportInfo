@@ -136,9 +136,6 @@ private fun ColumnScope.SettingsPanel(
             onClick = { onChangeThemeBrand(ThemeBrand.ANDROID) },
         )
     }
-    AnimatedVisibility(visible = settings.brand == ThemeBrand.DEFAULT) {
-            SettingsDialogSectionTitle(text = stringResource(R.string.feature_settings_dynamic_color_preference))
-    }
     SettingsDialogSectionTitle(text = stringResource(R.string.feature_settings_dark_mode_preference))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
