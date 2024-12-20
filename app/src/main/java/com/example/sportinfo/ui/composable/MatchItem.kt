@@ -124,8 +124,7 @@ fun ScheduledMatchItem(match: Match, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(110.dp)
-            .padding(8.dp),
+            .padding(start = 8.dp, end = 8.dp, top = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {

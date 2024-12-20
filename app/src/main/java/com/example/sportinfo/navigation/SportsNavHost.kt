@@ -8,7 +8,6 @@ import com.example.sportinfo.ui.competitions.BaseRoute
 import com.example.sportinfo.ui.competitions.competitionsScreen
 import com.example.sportinfo.ui.competitions.matches.competitionMatchesScreen
 import com.example.sportinfo.ui.competitions.matches.navigateToCompetitionMatches
-import com.example.sportinfo.ui.favorites.favoritesScreen
 import com.example.sportinfo.ui.search.searchScreen
 import com.example.sportinfo.ui.teams.teamsScreen
 import com.example.sportinfo.ui.today.todayScreen
@@ -29,7 +28,6 @@ fun SportsNavHost(
         }
         todayScreen()
         teamsScreen()
-        favoritesScreen()
         searchScreen(navController::popBackStack, {}, {})
     }
 }

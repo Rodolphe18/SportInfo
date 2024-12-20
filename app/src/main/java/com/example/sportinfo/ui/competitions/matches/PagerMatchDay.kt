@@ -1,7 +1,8 @@
-package com.example.sportinfo.ui.competitions.pager
+package com.example.sportinfo.ui.competitions.matches
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,8 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.sportinfo.ui.competitions.matches.MatchesPerDaySection
-import com.example.sportinfo.ui.composable.LoadingScreen
+import com.example.sportinfo.data.remote.dto.matches.Match
+import com.example.sportinfo.ui.composable.MatchItem
+import com.example.sportinfo.ui.composable.ScheduledMatchItem
 import com.example.sportinfo.ui.composable.SectionTitle
 import com.example.sportinfo.util.DateTimeFormatter
 import okhttp3.internal.toImmutableMap
@@ -69,7 +71,7 @@ fun PagerMatchDay(viewmodel: PagerViewmodel = hiltViewModel()) {
                 }
             }
             matchesPerDay
-                ?.groupBy { match -> OffsetDateTime.parse(match.utcDate.orEmpty()).dayOfWeek }
+                ?.groupBy { match -> OffsetDateTime.parse(match.utcDate.orEmpty()).dayOfYear }
                 ?.toSortedMap()
                 ?.forEach { (key, matches) ->
                     item(key = key) {
@@ -88,3 +90,18 @@ fun PagerMatchDay(viewmodel: PagerViewmodel = hiltViewModel()) {
     }}
 
 
+@Composable
+fun MatchesPerDaySection(matches: Collection<Match>?) {
+    if (matches?.size != 0) {
+        Column {
+            if (matches != null) {
+                for (match in matches) {
+                    when (match.status) {
+                        "TIMED" -> ScheduledMatchItem(match)
+                        else -> MatchItem(match = match)
+                    }
+                }
+            }
+        }
+    }
+}

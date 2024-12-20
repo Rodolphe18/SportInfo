@@ -43,15 +43,14 @@ fun CompetitionsListScreen(
         CircularProgressIndicator()
     } else {
         LazyVerticalGrid(
-            modifier = Modifier.padding(horizontal = 8.dp),
+            modifier = Modifier.padding(horizontal = 4.dp),
             columns = GridCells.Fixed(1),
             state = rememberLazyGridState(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(8.dp)
         ) {
             items(items = competitionsListState.competitions) { competition ->
-                CompetitionItem(competition, { _, _ -> }, onCompetitionClick)
-
+                CompetitionItem(competition = competition, onCompetitionClick = onCompetitionClick)
             }
         }
     }

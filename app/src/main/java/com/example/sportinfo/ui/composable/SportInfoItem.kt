@@ -1,6 +1,5 @@
 package com.example.sportinfo.ui.composable
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,12 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -38,16 +37,21 @@ import com.francotte.android.sportinfo.R
 @Composable
 fun SmallTeamInfoItem(
     modifier: Modifier = Modifier,
-    team: Team,
-    onToggleFavorite: (Team, Boolean) -> Unit
+    team: Team
 ) {
-    Box(modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp).clip(RoundedCornerShape(8.dp)).background(LocalItemColor.current.itemColor).padding(horizontal = 8.dp)) {
+    Box(
+        modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(LocalItemColor.current.itemColor)
+            .padding(horizontal = 8.dp)
+    ) {
         Column {
             Row(
                 modifier = Modifier.padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(team.crest?.isNotEmpty() == true) {
+                if (team.crest?.isNotEmpty() == true) {
                     AsyncImage(
                         modifier = Modifier.size(25.dp),
                         model = ImageRequest.Builder(LocalContext.current)
@@ -73,28 +77,22 @@ fun SmallTeamInfoItem(
                 text = "Founded in ${team.founded}",
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
-                color = Color.LightGray
             )
         }
-        FavoriteButton(modifier = Modifier
-            .align(Alignment.TopEnd)
-            .padding(4.dp),
-            isFavorite = team.isFavorite,
-            onToggleFavorite = { checked -> onToggleFavorite(team, checked) })
-
     }
 }
 
 @Composable
 fun BigTeamInfoItem(
     modifier: Modifier = Modifier,
-    team: Team,
-    onToggleFavorite: (Team, Boolean) -> Unit
+    team: Team
 ) {
-    Box(modifier.background(LocalItemColor.current.itemColor)) {
+    Box(modifier.background(brush = Brush.linearGradient(listOf(LocalItemColor.current.itemColor.copy(0.2f),LocalItemColor.current.itemColor.copy(0.8f))))) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row(
-                modifier = Modifier.width(250.dp).padding(vertical = 4.dp),
+                modifier = Modifier
+                    .width(250.dp)
+                    .padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
@@ -110,40 +108,43 @@ fun BigTeamInfoItem(
                     text = team.name.orEmpty(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    maxLines = 2
+                    maxLines = 1
+                )
+            }
+            if (team.venue?.isNotEmpty() == true) {
+                Text(
+                    text = team.venue,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
+                )
+            }
+            team.area?.name?.let { country ->
+                Text(
+                    text = country,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
                 )
             }
             Text(
-                text = team.venue.orEmpty(),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
-            Text(
-                text = team.area?.name.orEmpty(),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
+                text = "Founded in ${team.founded}",
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp,
             )
         }
-        FavoriteButton(modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .padding(4.dp),
-            isFavorite = team.isFavorite,
-            onToggleFavorite = { checked -> onToggleFavorite(team, checked) })
-
     }
 }
 
 @Composable
 fun CompetitionItem(
+    modifier:Modifier=Modifier,
     competition: Competition,
-    onToggleFavorite: (Competition, Boolean) -> Unit,
     onCompetitionClick: (String, String, Int) -> Unit
 ) {
     Box(
-        Modifier
+        modifier
             .height(115.dp)
             .clip(shape = RoundedCornerShape(16.dp))
-            .background(LocalItemColor.current.itemColor)
+            .background(brush = Brush.linearGradient(listOf(LocalItemColor.current.itemColor.copy(0.2f),LocalItemColor.current.itemColor.copy(0.8f))))
             .clickable {
                 onCompetitionClick(
                     competition.code.orEmpty(),
@@ -151,7 +152,7 @@ fun CompetitionItem(
                     competition.currentSeason?.currentMatchday ?: 1
                 )
             }) {
-        Column(modifier = Modifier.padding(start = 8.dp,end = 8.dp, top = 6.dp)) {
+        Column(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 6.dp)) {
             Row(
                 modifier = Modifier.padding(top = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -174,11 +175,6 @@ fun CompetitionItem(
             SportsInfoMetaData1(competition)
             SportsInfoMetaData2(competition)
         }
-        FavoriteButton(modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .padding(4.dp),
-            isFavorite = competition.isFavorite,
-            onToggleFavorite = { checked -> onToggleFavorite(competition, checked) })
     }
 }
 

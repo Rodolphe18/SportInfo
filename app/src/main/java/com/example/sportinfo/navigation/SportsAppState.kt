@@ -19,7 +19,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.sportinfo.ui.competitions.navigateToCompetitions
-import com.example.sportinfo.ui.favorites.navigateToFavorites
 import com.example.sportinfo.ui.search.navigateToSearch
 import com.example.sportinfo.ui.teams.navigateToTeams
 import com.example.sportinfo.ui.today.navigateToToday
@@ -97,8 +96,7 @@ class SportsAppState(
                 TopLevelDestination.COMPETITIONS -> navController.navigateToCompetitions(topLevelNavOptions)
                 TopLevelDestination.TODAY -> navController.navigateToToday(topLevelNavOptions)
                 TopLevelDestination.TEAMS -> navController.navigateToTeams(topLevelNavOptions)
-               TopLevelDestination.FAVORIS -> navController.navigateToFavorites(topLevelNavOptions)
-            }
+             }
         }
     }
 

@@ -1,8 +1,8 @@
 package com.example.sportinfo.ui.search
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -43,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
@@ -70,6 +69,7 @@ import com.example.sportinfo.domain.model.Competition
 import com.example.sportinfo.domain.model.Team
 import com.example.sportinfo.ui.composable.CompetitionItem
 import com.example.sportinfo.ui.composable.SmallTeamInfoItem
+import com.example.sportinfo.ui.theme.LocalItemColor
 import com.francotte.android.sportinfo.R
 
 @Composable
@@ -78,17 +78,13 @@ internal fun SearchRoute(
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
- //   val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.searchResultUiState.collectAsStateWithLifecycle()
     val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
     SearchScreen(
         modifier = modifier,
         searchQuery = searchQuery,
-    //    recentSearchesUiState = recentSearchQueriesUiState,
         searchResultUiState = searchResultUiState,
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
-//        onSearchTriggered = searchViewModel::onSearchTriggered,
-//        onClearRecentSearches = searchViewModel::clearRecentSearches,
         onBackClick = onBackClick
     )
 }
@@ -97,11 +93,9 @@ internal fun SearchRoute(
 internal fun SearchScreen(
     modifier: Modifier = Modifier,
     searchQuery: String = "",
-    recentSearchesUiState: RecentSearchQueriesUiState = RecentSearchQueriesUiState.Loading,
     searchResultUiState: SearchResultUiState = SearchResultUiState.Loading,
     onSearchQueryChanged: (String) -> Unit = {},
     onSearchTriggered: (String) -> Unit = {},
-    onClearRecentSearches: () -> Unit = {},
     onBackClick: () -> Unit = {},
     onInterestsClick: () -> Unit = {}
 ) {
@@ -116,41 +110,18 @@ internal fun SearchScreen(
         when (searchResultUiState) {
             SearchResultUiState.Loading, SearchResultUiState.LoadFailed -> Unit
             SearchResultUiState.SearchNotReady -> SearchNotReadyBody()
-            SearchResultUiState.EmptyQuery -> {
-                if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
-                    RecentSearchesBody(
-                        onClearRecentSearches = onClearRecentSearches,
-                        onRecentSearchClicked = {
-                            onSearchQueryChanged(it)
-                            onSearchTriggered(it)
-                        },
-                        recentSearchQueries = recentSearchesUiState.recentQueries.map { it.query },
-                    )
-                }
-            }
-
+            SearchResultUiState.EmptyQuery -> Unit
             is SearchResultUiState.Success -> {
                 if (searchResultUiState.isEmpty()) {
                     EmptySearchResultBody(
                         searchQuery = searchQuery,
                         onInterestsClick = onInterestsClick,
                     )
-                    if (recentSearchesUiState is RecentSearchQueriesUiState.Success) {
-                        RecentSearchesBody(
-                            onClearRecentSearches = onClearRecentSearches,
-                            onRecentSearchClicked = {
-                                onSearchQueryChanged(it)
-                                onSearchTriggered(it)
-                            },
-                            recentSearchQueries = recentSearchesUiState.recentQueries.map { it.query },
-                        )
-                    }
                 } else {
                     SearchResultBody(
                         searchQuery = searchQuery,
                         teams = searchResultUiState.teams,
-                        competitions = searchResultUiState.competitions,
-                        onSearchTriggered = onSearchTriggered
+                        competitions = searchResultUiState.competitions
                     )
                 }
             }
@@ -242,8 +213,7 @@ private fun SearchNotReadyBody() {
 private fun SearchResultBody(
     searchQuery: String,
     teams: List<Team>,
-    competitions: List<Competition>,
-    onSearchTriggered: (String) -> Unit,
+    competitions: List<Competition>
 ) {
     val state = rememberLazyStaggeredGridState()
     Box(
@@ -280,7 +250,7 @@ private fun SearchResultBody(
                         key = "team-$teamId",
                         span = StaggeredGridItemSpan.FullLine,
                     ) {
-                        SmallTeamInfoItem(modifier = Modifier.border(width = Dp.Hairline, shape = MaterialTheme.shapes.large, color = Color(0xff9FBE5B)), team = team) { _, _ -> }
+                        SmallTeamInfoItem(modifier = Modifier.border(border = BorderStroke(Dp.Hairline, Color.Gray), shape = MaterialTheme.shapes.large), team = team)
                     }
                 }
             }
@@ -305,7 +275,7 @@ private fun SearchResultBody(
                         key = "competition-$competitionId",
                         span = StaggeredGridItemSpan.FullLine,
                     ) {
-                        CompetitionItem(competition = competition, { _, _-> }, { _, _, _ ->})
+                        CompetitionItem(modifier = Modifier.border(border = BorderStroke(Dp.Hairline, Color.Gray), shape = MaterialTheme.shapes.large), competition = competition, { _, _, _ ->})
                     }
                 }
             }
@@ -313,55 +283,6 @@ private fun SearchResultBody(
     }
 }
 
-@Composable
-private fun RecentSearchesBody(
-    recentSearchQueries: List<String>,
-    onClearRecentSearches: () -> Unit,
-    onRecentSearchClicked: (String) -> Unit,
-) {
-    Column {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(stringResource(id = R.string.feature_search_recent_searches))
-                    }
-                },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            )
-            if (recentSearchQueries.isNotEmpty()) {
-                IconButton(
-                    onClick = {
-                        onClearRecentSearches()
-                    },
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
-            }
-        }
-        LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-            items(recentSearchQueries) { recentSearch ->
-                Text(
-                    text = recentSearch,
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .clickable { onRecentSearchClicked(recentSearch) }
-                        .fillMaxWidth(),
-                )
-            }
-        }
-    }
-}
 
 @Composable
 private fun SearchToolbar(

@@ -1,13 +1,10 @@
-package com.example.sportinfo.ui.competitions.pager
+package com.example.sportinfo.ui.competitions.matches
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -15,7 +12,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.sportinfo.data.remote.dto.matches.Match
 import com.example.sportinfo.domain.repository.MatchRepository
-import com.example.sportinfo.ui.competitions.matches.CompetitionMatchesRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,14 +39,14 @@ class PagerViewmodel @Inject constructor(
         loadInitialPages()
     }
 
-    fun loadInitialPages() {
+    private fun loadInitialPages() {
         getMatchesForCurrentMatchDay()
         getMatchesForPreviousMatchDay()
         getMatchesForNextMatchDay()
     }
 
 
-    fun getMatchesForCurrentMatchDay() {
+    private fun getMatchesForCurrentMatchDay() {
         viewModelScope.launch {
             matchesRepository.getCompetitionMatchList(competitionCode, matchDay)
                 .collect { matches ->

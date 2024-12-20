@@ -1,14 +1,12 @@
 package com.example.sportinfo.ui.teams
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,8 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,8 +48,10 @@ fun TeamRoute(
     SportInfoGradientBackground(gradientColors = LocalGradientColors.current) {
 
     TwoPansPager(
-        page1 = { AllTeamsListScreen(allTeamsViewModel) },
-        page2 = { TeamsByChampionshipListScreen(sortedTeamsState) })
+        page1 = {
+            TeamsByChampionshipListScreen(sortedTeamsState)
+             },
+        page2 = { AllTeamsListScreen(allTeamsViewModel) })
 }}
 
 
@@ -74,10 +72,9 @@ fun AllTeamsListScreen(
             viewModel.getTeams()
         }
     }
-    LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        item { Spacer(Modifier.height(8.dp)) }
+    LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(8.dp), contentPadding = PaddingValues(8.dp)) {
         items(state.teams) { team ->
-            SmallTeamInfoItem(team = team) { _, _ -> }
+            SmallTeamInfoItem(team = team)
         }
         if (viewModel.pageStatus == PageStatus.PAGINATING) {
             item {
@@ -100,7 +97,7 @@ fun TeamsByChampionshipListScreen(state: SortedTeamsUiState) {
         is SortedTeamsUiState.Success -> {
             val teams = state.teams
             val championships = enumValues<TeamType>()
-            LazyColumn() {
+            LazyColumn {
                 item {
                     for (championship in championships) {
                         TeamsSection(
@@ -108,6 +105,7 @@ fun TeamsByChampionshipListScreen(state: SortedTeamsUiState) {
                             teams.filter { it.area?.name?.lowercase() == championship.country.lowercase() })
                     }
                 }
+                item { Spacer(Modifier.height(8.dp)) }
             }
         }
     }
@@ -126,7 +124,7 @@ fun TeamsSection(
             SectionTitle(title = title)
             LazyRow(
                 state = listState,
-                contentPadding = PaddingValues(horizontal = 16.dp),
+                contentPadding = PaddingValues(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(
@@ -134,9 +132,9 @@ fun TeamsSection(
                     key = { it.id }
                 ) { team ->
                     BigTeamInfoItem(modifier = Modifier
-                        .width(280.dp)
+                        .width(260.dp)
                         .aspectRatio(2f)
-                        .clip(shape = RoundedCornerShape(16.dp)), team, { _, _ -> })
+                        .clip(shape = RoundedCornerShape(16.dp)), team)
                 }
             }
         }

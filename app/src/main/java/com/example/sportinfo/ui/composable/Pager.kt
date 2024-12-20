@@ -56,7 +56,7 @@ fun TwoPansPager(
                     },
                     text = {
                         Text(
-                            text = if (index == 0) "All Teams" else "By Championship",
+                            text = if (index == 0) "By Championship" else "All Teams",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
