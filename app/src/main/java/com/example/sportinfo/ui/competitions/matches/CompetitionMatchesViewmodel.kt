@@ -24,10 +24,11 @@ class CompetitionMatchesViewmodel @Inject constructor(savedStateHandle: SavedSta
 
 
 
-    var state: StateFlow<CompetitionMatchesUiState> =
+    var state: StateFlow<CompetitionMatchesUiState?> =
         matchesRepository.getCompetitionMatchList(competitionCode, matchDay)
             .map { matches ->
-                CompetitionMatchesUiState(matches = matches.sortedByDescending { it.utcDate })
+                matches?.sortedByDescending { it.utcDate }
+                    ?.let { CompetitionMatchesUiState(matches = it) }
         }.stateIn(viewModelScope, WhileUiSubscribed, CompetitionMatchesUiState())
 
 

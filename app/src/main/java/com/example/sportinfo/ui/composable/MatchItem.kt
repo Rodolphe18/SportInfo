@@ -33,14 +33,13 @@ fun MatchItem(modifier: Modifier = Modifier, match: Match, isLive: Boolean = fal
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(120.dp)
             .background(LocalItemColor.current.itemColor)
-            .padding(8.dp)
+            .padding(horizontal = 8.dp, vertical = 16.dp)
     ) {
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(25.dp)
                     .padding(horizontal = 4.dp)
                     .weight(0.3f)
             ) {
@@ -78,10 +77,10 @@ fun MatchItem(modifier: Modifier = Modifier, match: Match, isLive: Boolean = fal
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(25.dp)
                     .padding(horizontal = 4.dp)
                     .weight(0.3f)
             ) {

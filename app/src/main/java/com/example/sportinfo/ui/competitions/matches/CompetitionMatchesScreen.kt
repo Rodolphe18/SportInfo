@@ -40,6 +40,7 @@ import com.example.sportinfo.ui.composable.MatchItem
 import com.example.sportinfo.ui.composable.ScheduledMatchItem
 import com.example.sportinfo.ui.composable.SectionTitle
 import com.example.sportinfo.util.DateTimeFormatter
+import java.time.OffsetDateTime
 
 @Composable
 internal fun CompetitionMatchesScreen(
@@ -49,10 +50,10 @@ internal fun CompetitionMatchesScreen(
     val competitionMatchesState by viewModel.state.collectAsStateWithLifecycle()
     val competitionName = viewModel.competitionName
     val matchDay = viewModel.matchDay
-    CompetitionMatchesScreen(competitionMatchesState, competitionName, matchDay, onBackClick)
+    CompetitionMatchesScreen(competitionMatchesState!!, competitionName, matchDay, onBackClick)
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompetitionMatchesScreen(
     uiState: CompetitionMatchesUiState,
@@ -97,14 +98,15 @@ fun CompetitionMatchesScreen(
                 ) }
             }
             uiState.matches
-                .groupBy { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) }
+                .groupBy { match -> OffsetDateTime.parse(match.utcDate.orEmpty()).dayOfYear }
                 .toSortedMap()
                 .forEach { (key, value) ->
+                    val matches = value.distinct()
                 item(key = key) {
-                    SectionTitle(modifier = Modifier.padding(bottom = 8.dp).background(Color(0xff9FBE5B).copy(alpha = 0.8f)), title = key.toString(), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+                    SectionTitle(modifier = Modifier.background(Color(0xff9FBE5B).copy(alpha = 0.8f)), title = DateTimeFormatter.getFormattedDate(value.first().utcDate.orEmpty()), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
                 }
-                items(value) {
-                        MatchesPerDaySection(value.sortedBy { it.utcDate })
+                items(matches) {
+                    MatchesPerDaySection(matches.sortedBy { it.utcDate })
                 }
             }
         }
@@ -112,8 +114,7 @@ fun CompetitionMatchesScreen(
 }
 
 @Composable
-fun MatchesPerDaySection(matches: List<Match>?) {
-    Column(modifier = Modifier.padding(top = 10.dp)) {
+fun MatchesPerDaySection(matches: Collection<Match>?) {
         if (matches?.size != 0) {
            Column {
                 if (matches != null) {
@@ -125,7 +126,6 @@ fun MatchesPerDaySection(matches: List<Match>?) {
                     }
                 }
             }
-        }
     }
 }
 

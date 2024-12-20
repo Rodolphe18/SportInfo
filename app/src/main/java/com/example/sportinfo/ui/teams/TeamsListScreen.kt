@@ -74,16 +74,10 @@ fun AllTeamsListScreen(
             viewModel.getTeams()
         }
     }
-    LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(2.dp)) {
         item { Spacer(Modifier.height(8.dp)) }
         items(state.teams) { team ->
-            SmallTeamInfoItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .padding(horizontal = 12.dp)
-                    .clip(shape = RoundedCornerShape(12.dp)), team = team
-            ) { _, _ -> }
+            SmallTeamInfoItem(team = team) { _, _ -> }
         }
         if (viewModel.pageStatus == PageStatus.PAGINATING) {
             item {
@@ -142,8 +136,7 @@ fun TeamsSection(
                     BigTeamInfoItem(modifier = Modifier
                         .width(280.dp)
                         .aspectRatio(2f)
-                        .clip(shape = RoundedCornerShape(16.dp))
-                        .background(Color.White), team, { _, _ -> })
+                        .clip(shape = RoundedCornerShape(16.dp)), team, { _, _ -> })
                 }
             }
         }

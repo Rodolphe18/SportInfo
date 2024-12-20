@@ -1,5 +1,6 @@
 package com.example.sportinfo.ui.competitions.pager
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -23,20 +24,33 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.sportinfo.ui.competitions.matches.MatchesPerDaySection
+import com.example.sportinfo.ui.composable.LoadingScreen
+import com.example.sportinfo.ui.composable.SectionTitle
 import com.example.sportinfo.util.DateTimeFormatter
+import okhttp3.internal.toImmutableMap
+import java.time.OffsetDateTime
 
 @Composable
 fun PagerMatchDay(viewmodel: PagerViewmodel = hiltViewModel()) {
-    val dayMatchMatches = viewmodel.matches
+    val matchesPerMatchDay = viewmodel.pageMatches.toImmutableMap()
     val matchDay = viewmodel.matchDay
     val pagerState = rememberPagerState(initialPage = matchDay, pageCount = { 40 })
-    val dayOfWeeks = dayMatchMatches.map { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) }.distinct().reversed()
     LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }.collect {
-            viewmodel.getMatchesForASpecificMatchDay(it)
-        }
+        snapshotFlow { pagerState.currentPage }.collect { newPage ->
+            if(newPage < viewmodel.matchDay ) {
+                viewmodel.matchDay = newPage
+            viewmodel.getMatchesForPreviousMatchDay()
+        } else {
+            viewmodel.matchDay = newPage
+            viewmodel.getMatchesForNextMatchDay()} }
     }
-    HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+    HorizontalPager(
+        state = pagerState,
+        beyondViewportPageCount = 1,
+        modifier = Modifier.fillMaxSize()
+    ) { index ->
+        val matchesPerDay = matchesPerMatchDay[index]?.distinct()
         LazyColumn(
             contentPadding = PaddingValues(8.dp),
             state = rememberLazyListState(),
@@ -46,22 +60,31 @@ fun PagerMatchDay(viewmodel: PagerViewmodel = hiltViewModel()) {
             item {
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     Text(
-                        text = "matchDay $page",
+                        text = "matchDay $index",
                         modifier = Modifier.padding(8.dp),
                         textAlign = TextAlign.Center,
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color.DarkGray
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
-//            item {
-//                for (date in dayOfWeeks) {
-//                    MatchesPerDaySection(
-//                        date,
-//                        dayMatchMatches.filter { DateTimeFormatter.getFormattedDate(it.utcDate.orEmpty()) == date }.sortedBy { it.utcDate })
-//                }
-//            }
+            matchesPerDay
+                ?.groupBy { match -> OffsetDateTime.parse(match.utcDate.orEmpty()).dayOfWeek }
+                ?.toSortedMap()
+                ?.forEach { (key, matches) ->
+                    item(key = key) {
+                        SectionTitle(
+                            modifier = Modifier.background(Color(0xff9FBE5B).copy(alpha = 0.8f)),
+                            title = DateTimeFormatter.getFormattedDate(matches.first().utcDate.orEmpty()),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp
+                        )
+                    }
+                    item {
+                        MatchesPerDaySection(matches.sortedBy { it.utcDate })
+                    }
+                }
         }
-    }
-}
+    }}
+
+

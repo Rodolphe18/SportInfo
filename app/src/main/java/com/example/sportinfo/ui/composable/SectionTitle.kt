@@ -27,8 +27,7 @@ fun SectionTitle(modifier: Modifier = Modifier,title: String, fontWeight: FontWe
                 text = title,
                 fontWeight = fontWeight,
                 fontSize = fontSize,
-                modifier = Modifier.padding(vertical = 6.dp),
-                color = Color.DarkGray
+                modifier = Modifier.padding(vertical = 6.dp)
             )
         }
     }

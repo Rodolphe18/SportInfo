@@ -26,4 +26,24 @@ data class AwayTeam(
         shortName: String,
         tla: String
     ) : this(emptyList(), null, crest, formation, id, leagueRank, emptyList(), name, shortName, tla)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AwayTeam
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + name.hashCode()
+        return result
+    }
+
+
 }

@@ -38,21 +38,19 @@ fun TodayScreen(uiState: TodayUiState) {
         ) { CircularProgressIndicator() }
 
         is TodayUiState.Success ->
-            SportInfoGradientBackground(gradientColors = LocalGradientColors.current) {
             LazyColumn {
-                    item {
-                        val teamsType = enumValues<TeamType>()
-                        for (teamType in teamsType) {
-                            TodaySection(
-                                teamType.title,
-                                uiState.matches.filter { it.area.name?.lowercase() == teamType.country.lowercase() })
-                        }
+                item {
+                    val teamsType = enumValues<TeamType>()
+                    for (teamType in teamsType) {
+                        TodaySection(
+                            teamType.title,
+                            uiState.matches.filter { it.area.name?.lowercase() == teamType.country.lowercase() })
                     }
                 }
             }
-
     }
 }
+
 
 @Composable
 fun TodaySection(
@@ -61,7 +59,10 @@ fun TodaySection(
 ) {
     Column(modifier = Modifier.padding(top = 10.dp)) {
         if (matches?.size != 0) {
-            SectionTitle(modifier = Modifier.background(Color(0xff9FBE5B).copy(alpha = 0.4f)), title = title)
+            SectionTitle(
+                modifier = Modifier.background(Color(0xff9FBE5B).copy(alpha = 0.6f)),
+                title = title
+            )
             Column {
                 if (matches != null) {
                     for (match in matches) {

@@ -1,10 +1,12 @@
 package com.example.sportinfo.ui.composable
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -38,8 +41,8 @@ fun SmallTeamInfoItem(
     team: Team,
     onToggleFavorite: (Team, Boolean) -> Unit
 ) {
-    Box(modifier.background(LocalItemColor.current.itemColor)) {
-        Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+    Box(modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp).clip(RoundedCornerShape(8.dp)).background(LocalItemColor.current.itemColor).padding(horizontal = 8.dp)) {
+        Column {
             Row(
                 modifier = Modifier.padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -66,22 +69,12 @@ fun SmallTeamInfoItem(
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp
             )
-            team.area?.name?.let {
-                Text(
-                    text = it,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp
-                )
-            }
-            team.runningCompetitions.mapNotNull { it?.name }.joinToString(" | ").let {
-                Text(
-                    text = it,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
+            Text(
+                text = "Founded in ${team.founded}",
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp,
+                color = Color.LightGray
+            )
         }
         FavoriteButton(modifier = Modifier
             .align(Alignment.TopEnd)
@@ -101,7 +94,7 @@ fun BigTeamInfoItem(
     Box(modifier.background(LocalItemColor.current.itemColor)) {
         Column(modifier = Modifier.padding(8.dp)) {
             Row(
-                modifier = Modifier.width(190.dp).padding(vertical = 4.dp),
+                modifier = Modifier.width(250.dp).padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
@@ -115,7 +108,7 @@ fun BigTeamInfoItem(
                 Text(
                     modifier = Modifier.padding(start = 6.dp),
                     text = team.name.orEmpty(),
-                    fontWeight = FontWeight.ExtraBold,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     maxLines = 2
                 )
@@ -123,16 +116,16 @@ fun BigTeamInfoItem(
             Text(
                 text = team.venue.orEmpty(),
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
+                fontSize = 14.sp
             )
             Text(
                 text = team.area?.name.orEmpty(),
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
+                fontSize = 14.sp
             )
         }
         FavoriteButton(modifier = Modifier
-            .align(Alignment.TopEnd)
+            .align(Alignment.BottomEnd)
             .padding(4.dp),
             isFavorite = team.isFavorite,
             onToggleFavorite = { checked -> onToggleFavorite(team, checked) })

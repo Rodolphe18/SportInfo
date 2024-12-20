@@ -1,7 +1,14 @@
 package com.example.sportinfo.ui.competitions.pager
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,12 +16,7 @@ import androidx.navigation.toRoute
 import com.example.sportinfo.data.remote.dto.matches.Match
 import com.example.sportinfo.domain.repository.MatchRepository
 import com.example.sportinfo.ui.competitions.matches.CompetitionMatchesRoute
-import com.example.sportinfo.util.WhileUiSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,27 +26,62 @@ class PagerViewmodel @Inject constructor(
     private val matchesRepository: MatchRepository
 ) : ViewModel() {
 
+    var isLoading by mutableStateOf(false)
+
     private val competitionCode =
         savedStateHandle.toRoute<CompetitionMatchesRoute>().competitionCode
 
-    val matchDay = savedStateHandle.toRoute<CompetitionMatchesRoute>().matchDay
+    val currentMatchDay = savedStateHandle.toRoute<CompetitionMatchesRoute>().matchDay
 
-    val competitionName = savedStateHandle.toRoute<CompetitionMatchesRoute>().competitionName
+    var matchDay by mutableIntStateOf(currentMatchDay)
 
-    private val _matches = mutableStateListOf<Match>()
-    val matches: SnapshotStateList<Match> = _matches
+    private val _pageMatches = mutableStateMapOf<Int, Set<Match>?>()
+    val pageMatches: SnapshotStateMap<Int, Set<Match>?> = _pageMatches
+
 
     init {
-        getMatchesForASpecificMatchDay(matchDay)
+        loadInitialPages()
     }
 
-    fun getMatchesForASpecificMatchDay(matchDay: Int) {
+    fun loadInitialPages() {
+        getMatchesForCurrentMatchDay()
+        getMatchesForPreviousMatchDay()
+        getMatchesForNextMatchDay()
+    }
+
+
+    fun getMatchesForCurrentMatchDay() {
         viewModelScope.launch {
-            matchesRepository.getCompetitionMatchList(competitionCode, matchDay).collectLatest { matches ->
-                _matches.clear()
-                _matches.addAll(matches.sortedByDescending { it.utcDate })
-            }
+            matchesRepository.getCompetitionMatchList(competitionCode, matchDay)
+                .collect { matches ->
+                    _pageMatches[matchDay] =
+                        matches?.sortedByDescending { it.utcDate }?.toSet()
+                }
         }
     }
 
+    fun getMatchesForPreviousMatchDay() {
+        viewModelScope.launch {
+            matchesRepository.getCompetitionMatchList(competitionCode, matchDay - 1)
+                .collect { matches ->
+                    _pageMatches[matchDay - 1] =
+                        matches?.sortedByDescending { it.utcDate }?.toSet()
+                }
+        }
+    }
+
+    fun getMatchesForNextMatchDay() {
+        viewModelScope.launch {
+            matchesRepository.getCompetitionMatchList(competitionCode, matchDay + 1)
+                .collect { matches ->
+                    _pageMatches[matchDay + 1] =
+                        matches?.sortedByDescending { it.utcDate }?.toSet()
+                }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        _pageMatches.clear()
+    }
 }
