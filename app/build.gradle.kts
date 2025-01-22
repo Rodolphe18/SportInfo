@@ -13,15 +13,15 @@ plugins {
 }
 
 android {
-    namespace = "com.francotte.android.sportinfo"
+    namespace = "com.francotte.sportinfo"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.francotte.android.sportinfo"
+        applicationId = "com.francotte.sportinfo"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,7 +47,14 @@ android {
     }
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 dependencies {
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
